@@ -30,18 +30,30 @@ public class CreerPetition extends HttpServlet{
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
 		// Create petition
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < 10; i++) {
+			//Entity p = new Entity("Petition", Long.MAX_VALUES-(formatter.format(date)+":"+User.getEmail()));
 			Entity p = new Entity("Petition");
+			int owner = r.nextInt(1000);
 			p.setProperty("titre", "Kirikou" + i);
 			p.setProperty("probleme", "gémalofess"+i);
-			p.setProperty("dateC", formatter.format(date));
+			Random d = new Random();
+			int date1 = 1 + d.nextInt(28);
+			String date2 = date1 + "/02/2021";
+			p.setProperty("dateC", date2);
+			//p.setProperty("dateC", formatter.format(date));
 			p.setProperty("etat", true);
-			p.setProperty("idAuteur", i+10);
-			HashSet<Integer> pset = new HashSet<Integer>();
-			while (pset.size() < 10) {
-				pset.add(i + r.nextInt(15));
+			p.setProperty("idAuteur", "U"+owner);
+			HashSet<String> pset = new HashSet<String>();
+			for(int j = 0;j<200;j++)  {
+				pset.add("U" + r.nextInt(1000));
 			}
 			p.setProperty("idSignataire", pset);
+			p.setProperty("nbSignature", pset.size());
+			HashSet<String> ftags = new HashSet<String>();
+			for(int k = 0;k<10;k++)  {
+				ftags.add("T" + r.nextInt(20));
+			}
+			p.setProperty("tags", ftags);
 			datastore.put(p);
 			response.getWriter().print("<li> created post:" + p.getKey() + "<br>");
 		}
