@@ -1,0 +1,6 @@
+[
+  "appengine-api",
+  "objectify",
+  "appengine-endpoints",
+  "clouddatastore"
+]
