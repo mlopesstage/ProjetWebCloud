@@ -39,4 +39,23 @@ public class PetitionEndpoint {
 		List<Entity> result = pq.asList(FetchOptions.Builder.withDefaults());
 		return result;
 	}
+	
+	@ApiMethod(name = "mycreatedpet", httpMethod = HttpMethod.GET)
+	public List<Entity> mycreatedpet() {
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		Query q = new Query("Petition").setFilter(new FilterPredicate("idAuteur", FilterOperator.EQUAL, "U400"));
+		PreparedQuery pq = datastore.prepare(q);
+		List<Entity> result = pq.asList(FetchOptions.Builder.withDefaults());
+		return result;
+	}
+	
+	@ApiMethod(name = "toppetition", httpMethod = HttpMethod.GET)
+	public List<Entity> toppetition() {
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		Query q = new Query("Petition").addSort("nbSignature", SortDirection.DESCENDING);
+		PreparedQuery pq = datastore.prepare(q);
+		List<Entity> result = pq.asList(FetchOptions.Builder.withLimit(100));
+		return result;
+	}
+	
 }

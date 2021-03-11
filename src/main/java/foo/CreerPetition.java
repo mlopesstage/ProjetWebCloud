@@ -41,7 +41,7 @@ public class CreerPetition extends HttpServlet{
 			String date2 = date1 + "/02/2021";
 			p.setProperty("dateC", date2);
 			//p.setProperty("dateC", formatter.format(date));
-			p.setProperty("etat", true);
+			p.setProperty("etat", "Ouverte");
 			p.setProperty("idAuteur", "U"+owner);
 			HashSet<String> pset = new HashSet<String>();
 			for(int j = 0;j<200;j++)  {
