@@ -1,7 +1,2 @@
 indexes:
-- kind: Petition 
-  properties:
-    - name: dateC 
-      direction: asc
-    - name: idSignataire 
-      direction: desc
+- kind: Petition

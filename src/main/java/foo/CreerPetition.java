@@ -31,20 +31,21 @@ public class CreerPetition extends HttpServlet{
 
 		// Create petition
 		for (int i = 0; i < 5; i++) {
+			int owner = r.nextInt(100);
 			Entity p = new Entity("Petition");
 			p.setProperty("titre", "Kirikou" + i);
 			p.setProperty("probleme", "gémalofess"+i);
 			p.setProperty("dateC", formatter.format(date));
 			p.setProperty("etat", true);
-			p.setProperty("idAuteur", i+10);
-			HashSet<Integer> pset = new HashSet<Integer>();
-			while (pset.size() < 10) {
-				pset.add(i + r.nextInt(15));
+			p.setProperty("idAuteur", "U"+owner);
+			HashSet<String> pset = new HashSet<String>();
+			for (int j = 0; j < 10; j++) {
+				pset.add("U" + r.nextInt(100));
 			}
 			p.setProperty("idSignataire", pset);
+			p.setProperty("nbSignature", pset.size());
 			datastore.put(p);
 			response.getWriter().print("<li> created post:" + p.getKey() + "<br>");
 		}
-		
 	}
 }

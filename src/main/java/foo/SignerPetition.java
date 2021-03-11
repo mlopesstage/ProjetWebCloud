@@ -20,6 +20,7 @@ import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
+import com.google.appengine.api.datastore.Transaction;
 
 
 @WebServlet(name = "Petsignature", urlPatterns = { "/signerpet" })
@@ -29,12 +30,10 @@ public class SignerPetition extends HttpServlet {
 		response.setContentType("text/html");
 		response.setCharacterEncoding("UTF-8");
 
-
 		response.getWriter().print("<h2> Signature d'une pétition </h2>");
 
-
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-        Key k = KeyFactory.createKey("Petition", 5634161670881280L);
+        Key k = KeyFactory.createKey("Petition", 5631671361601536L);
         Query q = new Query("Petition").setFilter(new FilterPredicate(Entity.KEY_RESERVED_PROPERTY, FilterOperator.EQUAL, k));
 
         PreparedQuery pq = datastore.prepare(q);
@@ -42,17 +41,27 @@ public class SignerPetition extends HttpServlet {
 
         Entity p = new Entity("Petition");
 
+        Transaction txn = datastore.beginTransaction();
+        
         try {
             p = datastore.get(k);
             for (Entity entity : result) {
-                //Utiliser HashSet possible ???
-                ArrayList<Integer> fset = (ArrayList<Integer>) entity.getProperty("idSignataire");
-                fset.add(25);
+                ArrayList<String> fset = (ArrayList<String>) entity.getProperty("idSignataire");
+                fset.add("PEPELOL");
                 p.setProperty("idSignataire", fset);
             }
+            
+            long cpt = (long) p.getProperty("nbSignature");
+            p.setProperty("nbSignature", cpt + 1);
             datastore.put(p);
+            txn.commit();
+
         } catch (EntityNotFoundException e) {
             response.getWriter().print("<li> ERROR <li>"); 
+        } finally {
+        	if (txn.isActive()) {
+        		txn.rollback();
+        	}
         }
 
         /*
