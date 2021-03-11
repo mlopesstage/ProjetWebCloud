@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Espace personnel</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+<script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+<script src="https://unpkg.com/mithril/mithril.js"></script>
+
+</head>
+<body>
+
+<script>
+var MyPetSigned = {
+	    list: [],
+	    loadList: function() {
+	        return m.request({
+	            method: "GET",
+	            url: "_ah/api/myApi/v1/signedpet/"
+	        })
+	        .then(function(result) {
+	            MyPetSigned.list = result.items
+	        	console.log("got:",result.items)
+	        	// m.redraw(true) 
+	        })
+	    }
+}
+
+
+		
+	
+function troncatstring(item){
+	var troncstring = {}
+	if(item.properties.probleme.length > 30){
+		troncstring = item.properties.probleme.substring(0,30)+"..."
+	}else{
+		troncstring = item.properties.probleme
+	}
+	return troncstring
+}
+
+
+var MyPetSignedView = {
+		  oninit: MyPetSigned.loadList,
+		  view: function() {
+		   	return m('div', [
+			  m('div',{class:'subtitle'},"Mes petitions signées"),
+			  m('table', {class:'table is-striped'},[
+			    m('tr', [
+			      m('th', {width:"20px"}, "Titre"),
+			      m('th', {width:"50px"}, "Date de création"),
+			      m('th', {width:"50px"}, "Probleme"),
+			      m('th', {width:"20px"}, "Signatures"),
+			      m('th', {width:"20px"}, "Détails"),
+			    ]),
+			    MyPetSigned.list.map(function(item) {
+			      return m("tr", [
+		  	        m('td', m('label', item.properties.titre)),
+		  	        m('td', m('label', item.properties.dateC)),
+			        m('td', m('label', troncatstring(item))),
+			        m('td', m('label', item.properties.nbSignature)),
+			        m('button', m('a[href=/]', { oncreate: m.route.link }, "Voir plus")),
+			      ])
+			    })
+			   ])
+			 ])
+		  }
+		}
+
+var MyPetCreated = {
+	    list: [],
+	    loadList: function() {
+	        return m.request({
+	            method: "GET",
+	            url: "_ah/api/myApi/v1/mycreatedpet/"
+	        })
+	        .then(function(result) {
+	            MyPetCreated.list = result.items
+	        	console.log("got:",result.items)
+	        	// m.redraw(true) 
+	        })
+	    }
+}
+
+var etatpet = {}
+
+var MyPetCreatedView = {
+		  oninit: MyPetCreated.loadList,
+		  view: function() {
+		   	return m('div', [
+			  m('div',{class:'subtitle'},"Mes petitions créées"),
+			  m('table', {class:'table is-striped'},[
+			    m('tr', [
+			      m('th', {width:"20px"}, "Titre"),
+			      m('th', {width:"50px"}, "Date de création"),
+			      m('th', {width:"50px"}, "Probleme"),
+			      m('th', {width:"20px"}, "Signatures"),
+			      m('th', {width:"20px"}, "Etat"),
+			      m('th', {width:"20px"}, "Détails"),
+			      
+			    ]),
+			    MyPetCreated.list.map(function(item) {
+			    	if(item.properties.etat){
+				    	etatpet = "Ouverte"
+				    }else{
+				    	etatpet = "Cloturée"
+				    }  	
+			        return m("tr", [
+		  	        m('td', m('label', item.properties.titre)),
+		  	        m('td', m('label', item.properties.dateC)),
+			        m('td', m('label', troncatstring(item))),
+			        m('td', m('label', item.properties.nbSignature)),
+			        m('td', m('label', etatpet)),
+			        m('button', m('a[href=/]', { oncreate: m.route.link }, "Voir plus")),
+			      ])
+			    })
+			   ])
+			 ])
+		  }
+		}
+		
+var Hello = {
+   view: function() {
+	   return m('div', {class:'container'}, [
+           m("h1", {class: 'title'}, 'Mon Espace Personnel'),
+           m('div',{class: 'tile is-ancestor'},[
+               m("div", {class: 'tile'}, m('div',{class:'tile is-child box'},m(MyPetSignedView))),
+               m("div", {class: 'tile'}, m('div',{class:'tile is-child box'},m(MyPetCreatedView))),
+           ])
+       ])
+   }
+	
+}
+m.mount(document.body, Hello)
+</script>
+
+
+</body>
+</html>

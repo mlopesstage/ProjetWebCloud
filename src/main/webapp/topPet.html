@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Mes Pétitions Signées</title>
+<title>Top pétitions</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -12,54 +12,64 @@
 
 </head>
 <body>
-<h1> "Plzzz affiche toi"</h1>
-
-	
-
 
 <script>
-var MyPetSigned = {
+var TopPet = {
 	    list: [],
 	    loadList: function() {
 	        return m.request({
 	            method: "GET",
-	            url: "_ah/api/myApi/v1/signedpet/"
+	            url: "_ah/api/myApi/v1/toppetition/"
 	        })
 	        .then(function(result) {
-	            MyPetSigned.list = result.items
+	            TopPet.list = result.items
 	        	console.log("got:",result.items)
 	        	// m.redraw(true) 
 	        })
 	    }
 }
-	    
-var MyPetSignedView = {
-		  oninit: MyPetSigned.loadList,
+
+var troncstring = {}
+
+var TopPetView = {
+		  oninit: TopPet.loadList,
 		  view: function() {
 		   	return m('div', [
-			  m('div',{class:'subtitle'},"Mes petitions signées"),
+			  m('div',{class:'subtitle'},"Top 100 des pétitions les plus signées"),
 			  m('table', {class:'table is-striped'},[
 			    m('tr', [
 			      m('th', {width:"20px"}, "Titre"),
-			      m('th', {width:"50px"}, "Probleme"),
+			      m('th', {width:"100px"}, "Date de création"),
+			      m('th', {width:"100px", height:"5px"}, "Probleme"),
+			      m('th', {width:"50px"}, "Signatures"),
+			      m('th', {width:"50px"}, "Détails"),
 			    ]),
-			    MyPetSigned.list.map(function(item) {
+			    TopPet.list.map(function(item) {
+			    	if(item.properties.probleme.length > 100){
+			    		troncstring = item.properties.probleme.substring(0,100)+"..."
+				    }else{
+				    	troncstring = item.properties.probleme
+				    }
 			      return m("tr", [
 		  	        m('td', m('label', item.properties.titre)),
-			        m('td', m('label', item.properties.probleme)),
+		  	        m('td', m('label', item.properties.dateC)),
+			        m('td', m('label', troncstring)),
+			        m('td', m('label', item.properties.nbSignature)),
+			        m('button', m('a[href=/]', { oncreate: m.route.link }, "Voir plus")),
 			      ])
 			    })
 			   ])
 			 ])
 		  }
 		}
-		
+
+
 var Hello = {
    view: function() {
 	   return m('div', {class:'container'}, [
-           m("h1", {class: 'title'}, 'Mes Pétitions Signées làààààààà'),
+           m("h1", {class: 'title'}, 'Top 100 des pétitions'),
            m('div',{class: 'tile is-ancestor'},[
-               m("div", {class: 'tile'}, m('div',{class:'tile is-child box'},m(MyPetSignedView))),
+               m("div", {class: 'tile'}, m('div',{class:'tile is-child box'},m(TopPetView))),
            ])
        ])
    }

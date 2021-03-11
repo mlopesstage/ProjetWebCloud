@@ -42,7 +42,7 @@ public class SignerPetition extends HttpServlet {
         Entity p = new Entity("Petition");
 
         Transaction txn = datastore.beginTransaction();
-        
+
         try {
             p = datastore.get(k);
             for (Entity entity : result) {
@@ -50,7 +50,7 @@ public class SignerPetition extends HttpServlet {
                 fset.add("PEPELOL");
                 p.setProperty("idSignataire", fset);
             }
-            
+
             long cpt = (long) p.getProperty("nbSignature");
             p.setProperty("nbSignature", cpt + 1);
             datastore.put(p);
@@ -59,9 +59,10 @@ public class SignerPetition extends HttpServlet {
         } catch (EntityNotFoundException e) {
             response.getWriter().print("<li> ERROR <li>"); 
         } finally {
-        	if (txn.isActive()) {
-        		txn.rollback();
-        	}
+
+            if (txn.isActive()) {
+                txn.rollback();
+            }
         }
 
         /*
