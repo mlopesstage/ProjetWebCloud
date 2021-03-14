@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Top pétitions</title>
+<title>Top petitions</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -12,7 +12,6 @@
 
 </head>
 <body>
-
 <script>
 var TopPet = {
 	    list: [],
@@ -35,11 +34,11 @@ var TopPetView = {
 		  oninit: TopPet.loadList,
 		  view: function() {
 		   	return m('div', [
-			  m('div',{class:'subtitle'},"Top 100 des pétitions les plus signées"),
+			  m('div',{class:'subtitle'},"Top 100 des pétitions les plus signées V20"),
 			  m('table', {class:'table is-striped'},[
 			    m('tr', [
 			      m('th', {width:"20px"}, "Titre"),
-			      m('th', {width:"0px"}, "Date de création"),
+			      m('th', {width:"100px"}, "Date de création"),
 			      m('th', {width:"100px"}, "Probleme"),
 			      m('th', {width:"50px"}, "Signatures"),
 			      m('th', {width:"50px"}, "Détails"),
@@ -50,19 +49,19 @@ var TopPetView = {
 				    }else{
 				    	troncstring = item.properties.probleme
 				    }
+
 			      return m("tr", [
 		  	        m('td', m('label', item.properties.titre)),
 		  	        m('td', m('label', item.properties.dateC)),
 			        m('td', m('label', troncstring)),
 			        m('td', m('label', item.properties.nbSignature)),
-			        m('button', m('a[href=/]', { oncreate: m.route.link }, "Voir plus")),
+			        m('button', m('a[href=/detailsPet.html?id='+item.key.id+']', { oncreate: m.route.link }, "Voir plus")),
 			      ])
 			    })
 			   ])
 			 ])
 		  }
 		}
-
 
 var Hello = {
    view: function() {
@@ -73,11 +72,8 @@ var Hello = {
            ])
        ])
    }
-	
 }
 m.mount(document.body, Hello)
 </script>
-
-
 </body>
 </html>

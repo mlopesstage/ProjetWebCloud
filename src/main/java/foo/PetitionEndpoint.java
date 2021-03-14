@@ -1,6 +1,7 @@
 package foo;
 import java.util.List;
-import java.util.Random;
+
+import javax.servlet.http.HttpServletRequest;
 
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
@@ -10,6 +11,8 @@ import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.FetchOptions;
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.FilterOperator;
@@ -58,4 +61,15 @@ public class PetitionEndpoint {
 		return result;
 	}
 	
+	@ApiMethod(name = "detailpet", httpMethod = HttpMethod.GET)
+	public List<Entity> detailpet(HttpServletRequest request) {
+		long str  = Long.parseLong(request.getParameter("id"));
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		Key k = KeyFactory.createKey("Petition", str);
+		Query q = new Query("Petition").setFilter(new FilterPredicate(Entity.KEY_RESERVED_PROPERTY, FilterOperator.EQUAL, k));
+		PreparedQuery pq = datastore.prepare(q);
+		List<Entity> result = pq.asList(FetchOptions.Builder.withDefaults());
+		System.out.println("TESTKEKEKEKE" + str);
+		return result;
+	}
 }
