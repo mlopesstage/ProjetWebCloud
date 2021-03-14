@@ -40,7 +40,7 @@ var TopPetView = {
 			    m('tr', [
 			      m('th', {width:"20px"}, "Titre"),
 			      m('th', {width:"100px"}, "Date de création"),
-			      m('th', {width:"100px", height:"5px"}, "Probleme"),
+			      m('th', {width:"100px"}, "Probleme"),
 			      m('th', {width:"50px"}, "Signatures"),
 			      m('th', {width:"50px"}, "Détails"),
 			    ]),
@@ -55,7 +55,7 @@ var TopPetView = {
 		  	        m('td', m('label', item.properties.dateC)),
 			        m('td', m('label', troncstring)),
 			        m('td', m('label', item.properties.nbSignature)),
-			        m('button', m('a[href=/]', { oncreate: m.route.link }, "Voir plus")),
+			        m('button', m('a[href=/detailsPet.html?'+item.key.id+']', { oncreate: m.route.link }, "Voir plus")),
 			      ])
 			    })
 			   ])
