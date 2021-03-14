@@ -39,7 +39,7 @@ public class PetitionEndpoint {
 	@ApiMethod(name = "signedpet", httpMethod = HttpMethod.GET)
 	public List<Entity> signedpet() {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-		Query q = new Query("Petition").setFilter(new FilterPredicate("idSignataire", FilterOperator.EQUAL, "U439"));
+		Query q = new Query("Petition").setFilter(new FilterPredicate("idSignataire", FilterOperator.EQUAL, "U528"));
 		PreparedQuery pq = datastore.prepare(q);
 		List<Entity> result = pq.asList(FetchOptions.Builder.withDefaults());
 		return result;
@@ -48,7 +48,7 @@ public class PetitionEndpoint {
 	@ApiMethod(name = "mycreatedpet", httpMethod = HttpMethod.GET)
 	public List<Entity> mycreatedpet() {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-		Query q = new Query("Petition").setFilter(new FilterPredicate("idAuteur", FilterOperator.EQUAL, "U400"));
+		Query q = new Query("Petition").setFilter(new FilterPredicate("idAuteur", FilterOperator.EQUAL, "U528"));
 		PreparedQuery pq = datastore.prepare(q);
 		List<Entity> result = pq.asList(FetchOptions.Builder.withDefaults());
 		return result;
@@ -65,9 +65,10 @@ public class PetitionEndpoint {
 	}
 	
 	@ApiMethod(name = "detailpet", httpMethod = HttpMethod.GET)
-	public List<Entity> detailpet(@Named("str") String str) {
+	public List<Entity> detailpet(@Named("id") String id) {
+		//long idl = Long.parseLong(id);
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-		Key k = KeyFactory.createKey("Petition", str);
+		Key k = KeyFactory.createKey("Petition", id);
 		Query q = new Query("Petition").setFilter(new FilterPredicate(Entity.KEY_RESERVED_PROPERTY, FilterOperator.EQUAL, k));
 		PreparedQuery pq = datastore.prepare(q);
 		List<Entity> result = pq.asList(FetchOptions.Builder.withDefaults());

@@ -50,11 +50,11 @@ var MyPetSignedView = {
 			  m('div',{class:'subtitle'},"Mes petitions signées"),
 			  m('table', {class:'table is-striped'},[
 			    m('tr', [
-			      m('th', {width:"20px"}, "Titre"),
-			      m('th', {width:"50px"}, "Date de création"),
-			      m('th', {width:"50px"}, "Probleme"),
-			      m('th', {width:"20px"}, "Signatures"),
-			      m('th', {width:"20px"}, "Détails"),
+			      m('th', {width:"25%"}, "Titre"),
+			      m('th', {width:"15%"}, "Date de création"),
+			      m('th', {width:"40%"}, "Probleme"),
+			      m('th', {width:"10%"}, "Signatures"),
+			      m('th', {width:"10%"}, "Détails"),
 			    ]),
 			    MyPetSigned.list.map(function(item) {
 			      return m("tr", [
@@ -62,7 +62,7 @@ var MyPetSignedView = {
 		  	        m('td', m('label', item.properties.dateC)),
 			        m('td', m('label', troncatstring(item))),
 			        m('td', m('label', item.properties.nbSignature)),
-			        m('button', m('a[href=/]', { oncreate: m.route.link }, "Voir plus")),
+			        m('button', m('a[href=/detailsPet.html?'+item.key.id+']', "Voir plus")),
 			      ])
 			    })
 			   ])
@@ -94,12 +94,12 @@ var MyPetCreatedView = {
 			  m('div',{class:'subtitle'},"Mes petitions créées"),
 			  m('table', {class:'table is-striped'},[
 			    m('tr', [
-			      m('th', {width:"20px"}, "Titre"),
-			      m('th', {width:"50px"}, "Date de création"),
-			      m('th', {width:"50px"}, "Probleme"),
-			      m('th', {width:"20px"}, "Signatures"),
-			      m('th', {width:"20px"}, "Etat"),
-			      m('th', {width:"20px"}, "Détails"),
+			      m('th', {width:"25%"}, "Titre"),
+			      m('th', {width:"15%"}, "Date de création"),
+			      m('th', {width:"30%"}, "Probleme"),
+			      m('th', {width:"10%"}, "Signatures"),
+			      m('th', {width:"10%"}, "Etat"),
+			      m('th', {width:"10%"}, "Détails"),
 			      
 			    ]),
 			    MyPetCreated.list.map(function(item) {
@@ -114,7 +114,7 @@ var MyPetCreatedView = {
 			        m('td', m('label', troncatstring(item))),
 			        m('td', m('label', item.properties.nbSignature)),
 			        m('td', m('label', etatpet)),
-			        m('button', m('a[href=/]', { oncreate: m.route.link }, "Voir plus")),
+			        m('button', m('a[href=/detailsPet.html?'+item.key.id+']', "Voir plus")),
 			      ])
 			    })
 			   ])

@@ -22,27 +22,32 @@ public class CreerPetition extends HttpServlet{
 		response.setContentType("text/html");
 		response.setCharacterEncoding("UTF-8");
 		
-		Date date = new Date();
-		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+		//Date date = new Date();
+		//SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 		
 		
 		Random r = new Random();
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
 		// Create petition
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 250; i++) {
 			//Entity p = new Entity("Petition", Long.MAX_VALUES-(formatter.format(date)+":"+User.getEmail()));
-			Entity p = new Entity("Petition");
-			int owner = r.nextInt(1000);
-			p.setProperty("titre", "Kirikou" + i);
-			p.setProperty("probleme", "gémalofess"+i);
 			Random d = new Random();
 			int date1 = 1 + d.nextInt(28);
-			String date2 = date1 + "/02/2021";
-			p.setProperty("dateC", date2);
+			int date2 = 1 + d.nextInt(12);
+			int date3 = 2017 + d.nextInt(3);
+			int date4 = d.nextInt(23);
+			int date5 = d.nextInt(59);
+			int date6 = d.nextInt(59);
+			String owner = "U"+r.nextInt(1000);
+			Entity p = new Entity("Petition", date1+""+date2+""+date3+""+date4+""+date5+""+date6+""+owner);
+			p.setProperty("titre", "Contre la COVID" + i);
+			p.setProperty("probleme", "La miage c'est difficile"+i);		
+			String datelocale = date1+"/"+date2+"/"+date3+" "+date4+":"+date5+":"+date6;
+			p.setProperty("dateC", datelocale);
 			//p.setProperty("dateC", formatter.format(date));
 			p.setProperty("etat", "Ouverte");
-			p.setProperty("idAuteur", "U"+owner);
+			p.setProperty("idAuteur", owner);
 			HashSet<String> pset = new HashSet<String>();
 			for(int j = 0;j<200;j++)  {
 				pset.add("U" + r.nextInt(1000));
@@ -50,7 +55,7 @@ public class CreerPetition extends HttpServlet{
 			p.setProperty("idSignataire", pset);
 			p.setProperty("nbSignature", pset.size());
 			HashSet<String> ftags = new HashSet<String>();
-			for(int k = 0;k<10;k++)  {
+			for(int k = 0;k<3;k++)  {
 				ftags.add("T" + r.nextInt(20));
 			}
 			p.setProperty("tags", ftags);
