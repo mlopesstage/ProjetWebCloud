@@ -15,19 +15,20 @@
 
 <script>
 
-var str = {}
+var currenturl = document.location.href
+var idobj = currenturl.split('?')[1]
+var idurl = "_ah/api/myApi/v1/detailpet/"+idobj
 
 var DetailsPet = {
-	    list: [],
-	    loadList: function(str) {
+	    list: [],   
+	    loadList: function(idobj) {
 	        return m.request({
-	            method: "GET",
-	            url: "_ah/api/myApi/v1/detailpet/"
+	        	method: "GET", 
+	            url: idurl
 	        })
 	        .then(function(result) {
 	            DetailsPet.list = result.items
-	            //console.log("got:",str)
-	        	//console.log("got:",result.items)
+	        	console.log("got:",result.items)
 	        	// m.redraw(true) 
 	        })
 	    }
@@ -37,30 +38,28 @@ var DetailsPetView = {
 		  oninit: DetailsPet.loadList,
 		  view: function() {
 		   	return m('div', [
-			  m('div',{class:'subtitle'},"Détails de cette pétition V13"),
+			  m('div',{class:'subtitle'},"Détails de cette pétition"),
 			  m('table', {class:'table is-striped'},[
 			    m('tr', [
-			      m('th', {width:"20px"}, "Titre"), 
-			      //m('th', {width:"20px"}, "Iddelapet"), 
-			      //m('th', {width:"100px"}, "Date de création"),
-			      //m('th', {width:"50px"}, "Auteur"),
-			      //m('th', {width:"100px"}, "Probleme"),
-			      //m('th', {width:"50px"}, "Signatures"),
-			      //m('th', {width:"50px"}, "Tags"),
-			      //m('th', {width:"50px"}, "Etat"),
-			      //m('th', {width:"50px"}, "Signer"),
+			      m('th', {width:"20%"}, "Titre"), 
+			      m('th', {width:"15%"}, "Date de création"),
+			      m('th', {width:"5%"}, "Auteur"),
+			      m('th', {width:"40%"}, "Probleme"),
+			      m('th', {width:"5%"}, "Signatures"),
+			      m('th', {width:"5%"}, "Tags"),
+			      m('th', {width:"5%"}, "Etat"),
+			      m('th', {width:"5%"}, "Signer"),
 			    ]),
 			    DetailsPet.list.map(function(item) {			  
 			      return m('tr', [
-		  	        //m('td', m('label', item.properties.titre)),
-		  	        m('td', m('label', item)),
-		  	        //m('td', m('label', item.properties.dateC)),
-		  	        //m('td', m('label', item.properties.idAuteur)),
-			        //m('td', m('label', item.properties.probleme)),
-			        //m('td', m('label', item.properties.nbSignature)),
-			        //m('td', m('label', item.properties.tags)),
-			        //m('td', m('label', item.properties.etat)),
-			        //m('button', m('a[href=/]', { oncreate: m.route.link }, "Signer")),
+		  	        m('td', m('label', item.properties.titre)),
+		  	        m('td', m('label', item.properties.dateC)),
+		  	        m('td', m('label', item.properties.idAuteur)),
+			        m('td', m('label', item.properties.probleme)),
+			        m('td', m('label', item.properties.nbSignature)),
+			        m('td', m('label', item.properties.tags)),
+			        m('td', m('label', item.properties.etat)),
+			        m('button', m('a[href=/]', "Signer")),
 			      ])
 			    })
 			   ])

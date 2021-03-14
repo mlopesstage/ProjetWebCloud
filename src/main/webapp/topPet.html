@@ -34,14 +34,14 @@ var TopPetView = {
 		  oninit: TopPet.loadList,
 		  view: function() {
 		   	return m('div', [
-			  m('div',{class:'subtitle'},"Top 100 des pétitions les plus signées V20"),
+			  m('div',{class:'subtitle'},"Top 100 des pétitions les plus signées"),
 			  m('table', {class:'table is-striped'},[
 			    m('tr', [
-			      m('th', {width:"20px"}, "Titre"),
-			      m('th', {width:"100px"}, "Date de création"),
-			      m('th', {width:"100px"}, "Probleme"),
-			      m('th', {width:"50px"}, "Signatures"),
-			      m('th', {width:"50px"}, "Détails"),
+			      m('th', {width:"20%"}, "Titre"),
+			      m('th', {width:"15%"}, "Date de création"),
+			      m('th', {width:"45%"}, "Probleme"),
+			      m('th', {width:"10%"}, "Signatures"),
+			      m('th', {width:"10%"}, "Détails"),
 			    ]),
 			    TopPet.list.map(function(item) {
 			    	if(item.properties.probleme.length > 100){
@@ -49,13 +49,12 @@ var TopPetView = {
 				    }else{
 				    	troncstring = item.properties.probleme
 				    }
-
-			      return m("tr", [
+			      return m("tr", [ 
 		  	        m('td', m('label', item.properties.titre)),
 		  	        m('td', m('label', item.properties.dateC)),
 			        m('td', m('label', troncstring)),
 			        m('td', m('label', item.properties.nbSignature)),
-			        m('button', m('a[href=/detailsPet.html?id='+item.key.id+']', { oncreate: m.route.link }, "Voir plus")),
+			        m('button', m('a[href=/detailsPet.html?'+item.key.name+']', "Voir plus")),
 			      ])
 			    })
 			   ])
