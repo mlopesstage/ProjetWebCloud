@@ -135,6 +135,4 @@ public class PetitionEndpoint {
         }
 		return p;
 	}
-       
-	
 }

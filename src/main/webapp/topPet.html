@@ -14,64 +14,65 @@
 <body>
 <script>
 var TopPet = {
-	    list: [],
-	    loadList: function() {
-	        return m.request({
-	            method: "GET",
-	            url: "_ah/api/myApi/v1/toppetition/"
-	        })
-	        .then(function(result) {
-	            TopPet.list = result.items
-	        	console.log("got:",result.items)
-	        	// m.redraw(true) 
-	        })
-	    }
+	list: [],
+	loadList: function() {
+		return m.request({
+			method: "GET",
+			url: "_ah/api/myApi/v1/toppetition/"
+		})
+		.then(function(result) {
+			TopPet.list = result.items
+			console.log("got:",result.items)
+			// m.redraw(true) 
+		})
+	}
 }
 
 var troncstring = {}
 
 var TopPetView = {
-		  oninit: TopPet.loadList,
-		  view: function() {
-		   	return m('div', [
-			  m('div',{class:'subtitle'},"Top 100 des pétitions les plus signées"),
-			  m('table', {class:'table is-striped'},[
-			    m('tr', [
-			      m('th', {width:"20%"}, "Titre"),
-			      m('th', {width:"15%"}, "Date de création"),
-			      m('th', {width:"45%"}, "Probleme"),
-			      m('th', {width:"10%"}, "Signatures"),
-			      m('th', {width:"10%"}, "Détails"),
-			    ]),
-			    TopPet.list.map(function(item) {
-			    	if(item.properties.probleme.length > 100){
-			    		troncstring = item.properties.probleme.substring(0,100)+"..."
-				    }else{
-				    	troncstring = item.properties.probleme
-				    }
-			      return m("tr", [ 
-		  	        m('td', m('label', item.properties.titre)),
-		  	        m('td', m('label', item.properties.dateC)),
-			        m('td', m('label', troncstring)),
-			        m('td', m('label', item.properties.nbSignature)),
-			        m('button', m('a[href=/detailsPet.html?'+item.key.name+']', "Voir plus")),
-			      ])
-			    })
-			   ])
-			 ])
-		  }
-		}
+	oninit: TopPet.loadList,
+	view: function() {
+		return m('div', [
+			m('div',{class:'subtitle'},"Top 100 des pétitions les plus signées"),
+			m('table', {class:'table is-striped'},[
+				m('tr', [
+					m('th', {width:"20%"}, "Titre"),
+					m('th', {width:"15%"}, "Date de création"),
+					m('th', {width:"45%"}, "Probleme"),
+					m('th', {width:"10%"}, "Signatures"),
+					m('th', {width:"10%"}, "Détails"),
+				]),
+				TopPet.list.map(function(item) {
+					if(item.properties.probleme.length > 100){
+						troncstring = item.properties.probleme.substring(0,100)+"..."
+					} else {
+						troncstring = item.properties.probleme
+					}
+					return m("tr", [ 
+						m('td', m('label', item.properties.titre)),
+						m('td', m('label', item.properties.dateC)),
+						m('td', m('label', troncstring)),
+						m('td', m('label', item.properties.nbSignature)),
+						m('button', m('a[href=/detailsPet.html?'+item.key.name+']', "Voir plus")),
+					])
+				})
+			])
+		])
+	}
+}
 
 var Hello = {
-   view: function() {
-	   return m('div', {class:'container'}, [
-           m("h1", {class: 'title'}, 'Top 100 des pétitions'),
-           m('div',{class: 'tile is-ancestor'},[
-               m("div", {class: 'tile'}, m('div',{class:'tile is-child box'},m(TopPetView))),
-           ])
-       ])
-   }
+	view: function() {
+		return m('div', {class:'container'}, [
+			m("h1", {class: 'title'}, 'Top 100 des pétitions'),
+			m('div',{class: 'tile is-ancestor'},[
+				m("div", {class: 'tile'}, m('div',{class:'tile is-child box'},m(TopPetView))),
+			])
+		])
+	}
 }
+
 m.mount(document.body, Hello)
 </script>
 </body>
