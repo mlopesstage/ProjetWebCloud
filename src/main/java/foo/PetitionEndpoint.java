@@ -39,7 +39,7 @@ public class PetitionEndpoint {
 	@ApiMethod(name = "signedpet", httpMethod = HttpMethod.GET)
 	public List<Entity> signedpet() {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-		Query q = new Query("Petition").setFilter(new FilterPredicate("idSignataire", FilterOperator.EQUAL, "U10"));
+		Query q = new Query("Petition").setFilter(new FilterPredicate("idSignataire", FilterOperator.EQUAL, "U1001"));
 		PreparedQuery pq = datastore.prepare(q);
 		List<Entity> result = pq.asList(FetchOptions.Builder.withDefaults());
 		return result;
@@ -48,7 +48,7 @@ public class PetitionEndpoint {
 	@ApiMethod(name = "mycreatedpet", httpMethod = HttpMethod.GET)
 	public List<Entity> mycreatedpet() {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-		Query q = new Query("Petition").setFilter(new FilterPredicate("idAuteur", FilterOperator.EQUAL, "U10"));
+		Query q = new Query("Petition").setFilter(new FilterPredicate("idAuteur", FilterOperator.EQUAL, "U1001"));
 		PreparedQuery pq = datastore.prepare(q);
 		List<Entity> result = pq.asList(FetchOptions.Builder.withDefaults());
 		return result;
@@ -93,7 +93,7 @@ public class PetitionEndpoint {
             p = datastore.get(k);
             for (Entity entity : result) {
                 ArrayList<String> fset = (ArrayList<String>) entity.getProperty("idSignataire");
-                fset.add("U10");
+                fset.add("U1001");
                 p.setProperty("idSignataire", fset);
             }
 
