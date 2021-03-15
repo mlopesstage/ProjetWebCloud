@@ -93,7 +93,7 @@ public class PetitionEndpoint {
             p = datastore.get(k);
             for (Entity entity : result) {
                 ArrayList<String> fset = (ArrayList<String>) entity.getProperty("idSignataire");
-                fset.add("U528");
+                fset.add("U10");
                 p.setProperty("idSignataire", fset);
             }
 
