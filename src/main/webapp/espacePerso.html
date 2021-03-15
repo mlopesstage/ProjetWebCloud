@@ -29,9 +29,6 @@ var MyPetSigned = {
 	    }
 }
 
-
-		
-	
 function troncatstring(item){
 	var troncstring = {}
 	if(item.properties.probleme.length > 30){
@@ -41,7 +38,6 @@ function troncatstring(item){
 	}
 	return troncstring
 }
-
 
 var MyPetSignedView = {
 		  oninit: MyPetSigned.loadList,
@@ -62,7 +58,7 @@ var MyPetSignedView = {
 		  	        m('td', m('label', item.properties.dateC)),
 			        m('td', m('label', troncatstring(item))),
 			        m('td', m('label', item.properties.nbSignature)),
-			        m('button', m('a[href=/detailsPet.html?'+item.key.id+']', "Voir plus")),
+			        m('button', m('a[href=/detailsPet.html?'+item.key.name+']', "Voir plus")),
 			      ])
 			    })
 			   ])
@@ -85,8 +81,6 @@ var MyPetCreated = {
 	    }
 }
 
-var etatpet = {}
-
 var MyPetCreatedView = {
 		  oninit: MyPetCreated.loadList,
 		  view: function() {
@@ -100,21 +94,15 @@ var MyPetCreatedView = {
 			      m('th', {width:"10%"}, "Signatures"),
 			      m('th', {width:"10%"}, "Etat"),
 			      m('th', {width:"10%"}, "Détails"),
-			      
 			    ]),
-			    MyPetCreated.list.map(function(item) {
-			    	if(item.properties.etat){
-				    	etatpet = "Ouverte"
-				    }else{
-				    	etatpet = "Cloturée"
-				    }  	
+			    MyPetCreated.list.map(function(item) {			    
 			        return m("tr", [
 		  	        m('td', m('label', item.properties.titre)),
 		  	        m('td', m('label', item.properties.dateC)),
 			        m('td', m('label', troncatstring(item))),
 			        m('td', m('label', item.properties.nbSignature)),
-			        m('td', m('label', etatpet)),
-			        m('button', m('a[href=/detailsPet.html?'+item.key.id+']', "Voir plus")),
+			        m('td', m('label', item.properties.etat)),
+			        m('button', m('a[href=/detailsPet.html?'+item.key.name+']', "Voir plus")),
 			      ])
 			    })
 			   ])
@@ -132,11 +120,8 @@ var Hello = {
            ])
        ])
    }
-	
 }
 m.mount(document.body, Hello)
 </script>
-
-
 </body>
 </html>

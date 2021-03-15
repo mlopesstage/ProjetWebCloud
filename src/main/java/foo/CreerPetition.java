@@ -62,6 +62,5 @@ public class CreerPetition extends HttpServlet{
 			datastore.put(p);
 			response.getWriter().print("<li> created post:" + p.getKey() + "<br>");
 		}
-		
 	}
 }

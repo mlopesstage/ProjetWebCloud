@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Top pétitions</title>
+<title>Top petitions</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -18,6 +18,8 @@
 var currenturl = document.location.href
 var idobj = currenturl.split('?')[1]
 var idurl = "_ah/api/myApi/v1/detailpet/"+idobj
+var idsignerpeturl = "_ah/api/myApi/v1/signerpet/"+idobj
+var idfermerpeturl = "_ah/api/myApi/v1/fermerpet/"+idobj
 
 var DetailsPet = {
 	    list: [],   
@@ -34,6 +36,37 @@ var DetailsPet = {
 	    }
 }
 
+var SignerPet = {
+	    list: [],   
+	    loadList: function(idobj) {
+	        return m.request({
+	        	method: "GET", 
+	            url: idsignerpeturl
+	        })
+	        .then(function(result) {
+	            DetailsPet.list = result.items
+	        	console.log("got:",result.items)
+	        	DetailsPet.loadList()
+	        	// m.redraw(true) 
+	        })
+	    }
+}
+
+var FermerPet = {
+    list: [],   
+    loadList: function(idobj) {
+        return m.request({
+        	method: "GET", 
+            url: idfermerpeturl
+        })
+        .then(function(result) {
+            DetailsPet.list = result.items
+        	console.log("got:",result.items)
+        	DetailsPet.loadList()
+        	// m.redraw(true) 
+        })
+    }
+}
 
 var DetailsPetView = {
 		  oninit: DetailsPet.loadList,
@@ -51,23 +84,52 @@ var DetailsPetView = {
 			      m('th', {width:"5%"}, "Etat"),
 			      m('th', {width:"5%"}, "Signer"),
 			    ]),
-			    DetailsPet.list.map(function(item) {			  
-			      return m('tr', [
-		  	        m('td', m('label', item.properties.titre)),
-		  	        m('td', m('label', item.properties.dateC)),
-		  	        m('td', m('label', item.properties.idAuteur)),
-			        m('td', m('label', item.properties.probleme)),
-			        m('td', m('label', item.properties.nbSignature)),
-			        m('td', m('label', item.properties.tags)),
-			        m('td', m('label', item.properties.etat)),
-			        m('button', m('a[href=/]', "Signer")),
-			      ])
-			    })
-			   ])
+			    DetailsPet.list.map(function(item) {			  			      			   
+		    		if(item.properties.idAuteur == "U10" && item.properties.etat == "Ouverte"){
+				    	return m('tr', [	
+			    			m('td', m('label', item.properties.titre)),
+			    		    m('td', m('label', item.properties.dateC)),
+			    		    m('td', m('label', item.properties.idAuteur)),
+			    		    m('td', m('label', item.properties.probleme)),
+			    		    m('td', m('label', item.properties.nbSignature)),
+			    		    m('td', m('label', item.properties.tags)),
+			    		    m('td', m('label', item.properties.etat)),
+			    		    m('button',{
+					        	class: 'button is-link',
+					        	onclick: function(e) {FermerPet.loadList()}					        	
+					        },"Fermer"),		    		    
+					     ])				    			    				    						    		
+			   		 }else if (!(item.properties.idSignataire.includes("U10")) && item.properties.etat == "Ouverte"){
+			    	 	return m('tr', [	
+				    		m('td', m('label', item.properties.titre)),
+			    		    m('td', m('label', item.properties.dateC)),
+			    		    m('td', m('label', item.properties.idAuteur)),
+			    		    m('td', m('label', item.properties.probleme)),
+			    		    m('td', m('label', item.properties.nbSignature)),
+			    		    m('td', m('label', item.properties.tags)),
+			    		    m('td', m('label', item.properties.etat)),
+			    		    m('button',{
+					        	class: 'button is-link',
+					        	onclick: function(e) {SignerPet.loadList()}					        	
+					        },"Signer"),		    		    
+				    	 ])
+			    	}else{				    		
+				    	 return m('tr', [	
+				    			m('td', m('label', item.properties.titre)),
+				    		    m('td', m('label', item.properties.dateC)),
+				    		    m('td', m('label', item.properties.idAuteur)),
+				    		    m('td', m('label', item.properties.probleme)),
+				    		    m('td', m('label', item.properties.nbSignature)),
+				    		    m('td', m('label', item.properties.tags)),
+				    		    m('td', m('label', item.properties.etat)),
+				    		    m('td', m('label', {style: {color: "red"}}, "Impossible")),				    		    				        		
+				        ])		
+			    	}				  				   			       			        				     
+			    })			   
 			 ])
-		  }
-		}
-
+		])
+	}
+}
 
 var Hello = {
    view: function() {
@@ -75,10 +137,9 @@ var Hello = {
            m("h1", {class: 'title'}, 'Détails de la pétition'),
            m('div',{class: 'tile is-ancestor'},[
                m("div", {class: 'tile'}, m('div',{class:'tile is-child box'},m(DetailsPetView))),
-           ])
+           ])         
        ])
    }
-	
 }
 m.mount(document.body, Hello)
 </script>
