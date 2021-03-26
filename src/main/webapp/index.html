@@ -3,10 +3,18 @@
 	<head>
 		<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
 		<title>ProjetWebCloud</title>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+		<meta name="google-signin-scope" content="profile email">
+		<meta name="google-signin-client_id" content="232742472331-2f32mq8k3pbenacl44usnrf37362vo4t.apps.googleusercontent.com">
+		<script src="https://apis.google.com/js/platform.js" async defer></script>
+		<script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+		<script src="https://unpkg.com/mithril/mithril.js"></script>
  	</head>
  	<body>
+
 		<h1>Buenvendidos! Vous êtes U1001</h1>
-		<h2>V1.18</h2>
+
+		<h2>V1.19</h2>
 		<table>
 			<tr>
 				<td colspan="2" style="font-weight:bold;">Menu principal du site (PROVISOIRE):</td>
@@ -18,9 +26,77 @@
 			<tr>    
 				<td><a href='/espacePerso.html'>Affiche mon espace personnel (pet créées + signées)</a></td>
 			</tr>
-			<tr> 
+			<tr>
 				<td><a href='/topPet.html'>Affiche les 100 pétitions les plus signées</a></td>
 			</tr>
 		</table>
+
+		<div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
+		
+		<script>
+		
+		var accueil = {
+				view: function() {
+					return m('div', {class:'container'}, [
+						m('h1', {class: 'title'}, "Buenvendidos! Vous êtes U10"),
+						m('h2', "V1.18"),
+						m('h4', "Menu principal du site (PROVISOIRE):"),
+						m('h4', "La base est déjà peuplée de 250 pétitions (pour info)"),
+						m('button', m('a[href=/creerpetition]', "Créer une pétition (Pour l'instant permet de peupler la base de 250 pétitions)")),
+						m('button', m('a[href=/espacePerso.html]', "Affiche mon espace personnel (pet créées + signées)")),
+						m('button', m('a[href=/topPet.html]', "Affiche les 100 pétitions les plus signées")),
+						m("div", {
+					      	   "class":"g-signin2",
+					      	   "data-theme":"dark",
+					      	   "data-onsuccess": "onSignIn"}),
+					])
+				}
+			}
+
+	      function onSignIn(googleUser) {
+	        // Useful data for your client-side scripts:
+	        var profile = googleUser.getBasicProfile();
+			  Profile.name=profile.getName();
+			  Profile.email=profile.getEmail();
+			  Profile.ID=googleUser.getAuthResponse().id_token;
+			  m.route.set("/secret")
+	      }
+		
+	      function signOut() {
+	            var auth2 = gapi.auth2.getAuthInstance();
+	            auth2.signOut().then(function () {
+	              console.log('User signed out.');
+	              m.route.set("/login")
+	            });
+	        }
+	      
+	      var Profile={
+	    		  name:"",
+	    		  email:"",
+	    		  ID:"",
+	    		  view: function(){
+	    			return m('div', {class:'container'}, [
+	    		  	  m("h1", {class: 'title'}, "name:"+Profile.name),
+	    			  m("h2", {class: 'subtitle'}, "email:"+Profile.email),
+	    			  m("button",{class:"button", onclick: function(e) { signOut()}},"Deconnexion"),
+	    			])
+	    		  }
+	      }
+	      
+	      var Login = {
+	    		  view: function() {
+	    		 		m.route.set('/topPet.html')
+	    		    }
+	    		}
+	      
+	      m.route(document.body, "/secret", {
+	    	  "/secret": { onmatch: function() {
+	    	            	if (Profile.ID=="") {m.route.set("/login")}
+	    	            	else return Profile
+	    	        		}},
+	    	  "/login": accueil
+	    	})
+	    </script>
+    
 	</body>
 </html>
