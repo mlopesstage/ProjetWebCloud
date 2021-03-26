@@ -85,7 +85,7 @@ var DetailsPetView = {
 			      m('th', {width:"5%"}, "Signer"),
 			    ]),
 			    DetailsPet.list.map(function(item) {			  			      			   
-		    		if(item.properties.idAuteur == "U10" && item.properties.etat == "Ouverte"){
+		    		if(item.properties.idAuteur == "U1001" && item.properties.etat == "Ouverte"){
 				    	return m('tr', [	
 			    			m('td', m('label', item.properties.titre)),
 			    		    m('td', m('label', item.properties.dateC)),
@@ -99,7 +99,7 @@ var DetailsPetView = {
 					        	onclick: function(e) {FermerPet.loadList()}					        	
 					        },"Fermer"),		    		    
 					     ])				    			    				    						    		
-			   		 }else if (!(item.properties.idSignataire.includes("U10")) && item.properties.etat == "Ouverte"){
+			   		 }else if (!(item.properties.idSignataire.includes("U1001")) && item.properties.etat == "Ouverte"){
 			    	 	return m('tr', [	
 				    		m('td', m('label', item.properties.titre)),
 			    		    m('td', m('label', item.properties.dateC)),
