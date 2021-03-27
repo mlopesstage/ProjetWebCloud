@@ -54,7 +54,7 @@ var TopPetView = {
 						m('td', m('label', item.properties.dateC)),
 						m('td', m('label', troncstring)),
 						m('td', m('label', item.properties.nbSignature)),
-						m('button', m('a[href=/detailsPet.html?'+item.key.name+']', "Voir plus")),
+						m('button', {class:"button is-primary is-rounded is-small", onclick: function(e) { document.location.href="/detailsPet.html?"+item.key.name;}}, "Voir plus"),
 					])
 				})
 			])
@@ -66,9 +66,16 @@ var Hello = {
 	view: function() {
 		return m('div', {class:'container'}, [
 			m("h1", {class: 'title'}, 'Top 100 des pétitions'),
-			m('div',{class: 'tile is-ancestor'},[
+			m('div',{class: 'navbar-end'},[
+				m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/creerpetition.html";}}, "Créer petition"),
+				m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/espacePerso.html";}}, "Espace perso"),
+			]),
+			m('div',{class: 'navbar-end is-ancestor'},[
 				m("div", {class: 'tile'}, m('div',{class:'tile is-child box'},m(TopPetView))),
-			])
+			]),
+			m('div',{class: 'buttons is-right'},[
+				m('button', {class:"button is-warning is-rounded", onclick: function(e) { javascript:history.back();}}, "Retour"),
+			]),
 		])
 	}
 }

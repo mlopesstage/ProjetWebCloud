@@ -58,7 +58,7 @@ var MyPetSignedView = {
 						m('td', m('label', item.properties.dateC)),
 						m('td', m('label', troncatstring(item))),
 						m('td', m('label', item.properties.nbSignature)),
-						m('button', m('a[href=/detailsPet.html?'+item.key.name+']', "Voir plus")),
+						m('button', {class:"button is-primary is-rounded is-small", onclick: function(e) { document.location.href="/detailsPet.html?"+item.key.name;}}, "Voir plus"),
 					])
 				})
 			])
@@ -95,6 +95,7 @@ var MyPetCreatedView = {
 				m('th', {width:"10%"}, "Etat"),
 				m('th', {width:"10%"}, "Détails"),
 				]),
+				
 				MyPetCreated.list.map(function(item) {
 					return m("tr", [
 						m('td', m('label', item.properties.titre)),
@@ -102,7 +103,7 @@ var MyPetCreatedView = {
 						m('td', m('label', troncatstring(item))),
 						m('td', m('label', item.properties.nbSignature)),
 						m('td', m('label', item.properties.etat)),
-						m('button', m('a[href=/detailsPet.html?'+item.key.name+']', "Voir plus")),
+						m('button', {class:"button is-primary is-rounded is-small", onclick: function(e) { document.location.href="/detailsPet.html?"+item.key.name;}}, "Voir plus"),
 					])
 				})
 			])
@@ -114,10 +115,17 @@ var Hello = {
 	view: function() {
 		return m('div', {class:'container'}, [
 			m("h1", {class: 'title'}, 'Mon Espace Personnel'),
-			m('div',{class: 'tile is-ancestor'},[
+			m('div',{class: 'navbar-end'},[
+				m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/creerpetition.html";}}, "Créer petition"),
+				m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/topPet.html";}}, "Top Petition"),
+			]),
+			m('div',{class: 'navbar-end is-ancestor'},[
 				m("div", {class: 'tile'}, m('div',{class:'tile is-child box'},m(MyPetSignedView))),
 				m("div", {class: 'tile'}, m('div',{class:'tile is-child box'},m(MyPetCreatedView))),
-			])
+			]),
+			m('div',{class: 'buttons is-right'},[
+				m('button', {class:"button is-warning is-rounded", onclick: function(e) { javascript:history.back();}}, "Retour"),
+			]),
 		])
 	}
 }

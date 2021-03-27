@@ -96,7 +96,7 @@ var DetailsPetView = {
 							m('td', m('label', item.properties.tags)),
 							m('td', m('label', item.properties.etat)),
 							m('button',{
-								class: 'button is-link',
+								class: 'button is-danger is-rounded',
 								onclick: function(e) {FermerPet.loadList()}					        	
 							},"Fermer"),		    		    
 						])				    			    				    						    		
@@ -110,7 +110,7 @@ var DetailsPetView = {
 							m('td', m('label', item.properties.tags)),
 							m('td', m('label', item.properties.etat)),
 							m('button',{
-								class: 'button is-link',
+								class: 'button is-primary is-rounded',
 								onclick: function(e) {SignerPet.loadList()}					        	
 							},"Signer"),		    		    
 						])
@@ -136,9 +136,18 @@ var Hello = {
 	view: function() {
 		return m('div', {class:'container'}, [
 			m("h1", {class: 'title'}, 'Détails de la pétition'),
-			m('div',{class: 'tile is-ancestor'},[
+			
+			m('div',{class: 'navbar-end'},[
+				m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/topPet.html";}}, "Top Petition"),
+				m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/creerpetition.html";}}, "Créer petition"),
+				m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/espacePerso.html";}}, "Espace perso"),
+			]),
+			m('div',{class: 'navbar-end is-ancestor'},[
 				m("div", {class: 'tile'}, m('div',{class:'tile is-child box'},m(DetailsPetView))),
-			])         
+			]),
+			m('div',{class: 'buttons is-right'},[
+				m('button', {class:"button is-warning is-rounded", onclick: function(e) { javascript:history.back();}}, "Retour"),
+			]),
 		])
 	}
 }
