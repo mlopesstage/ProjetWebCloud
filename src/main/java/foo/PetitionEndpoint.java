@@ -24,8 +24,8 @@ import com.google.appengine.api.datastore.Query.SortDirection;
 
 @Api(name = "myApi",
      version = "v1",
-     audiences = "232742472331-2f32mq8k3pbenacl44usnrf37362vo4t.apps.googleusercontent.com",
-  	 clientIds = "232742472331-2f32mq8k3pbenacl44usnrf37362vo4t.apps.googleusercontent.com",
+     audiences = "46330245209-9jejvn58229dabq46josvavn3crj9ogl.apps.googleusercontent.com",
+  	 clientIds = "46330245209-9jejvn58229dabq46josvavn3crj9ogl.apps.googleusercontent.com",
      namespace =
      @ApiNamespace(
 		   ownerDomain = "helloworld.example.com",
