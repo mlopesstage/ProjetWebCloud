@@ -35,7 +35,6 @@ import com.google.appengine.api.datastore.Query.SortDirection;
 
 public class PetitionEndpoint {
 
-
 	@ApiMethod(name = "signedpet", httpMethod = HttpMethod.GET)
 	public List<Entity> signedpet() {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
