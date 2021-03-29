@@ -157,7 +157,7 @@ public class PetitionEndpoint {
 		p.setProperty("etat", "Ouverte");
 		//p.setProperty("idAuteur", user.getEmail());
 		p.setProperty("idAuteur", "U1001");
-		p.setProperty("nbSignature", 10000);
+		p.setProperty("nbSignature", 0);
 		p.setProperty("probleme", cp.petProbleme);
 		p.setProperty("titre", cp.petName);
 
