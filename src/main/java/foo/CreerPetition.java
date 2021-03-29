@@ -25,7 +25,7 @@ public class CreerPetition extends HttpServlet{
 		//Date date = new Date();
 		//SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 		
-		
+	
 		Random r = new Random();
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
