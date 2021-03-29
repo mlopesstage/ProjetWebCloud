@@ -149,23 +149,15 @@ public class PetitionEndpoint {
 	public Entity creerpetition(User user, CreerPetition1 cp) {
 
 		Date date = new Date();
-		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 		
-		//Modifier ordre date pour clé
-		/*
-		int date1 = 1 + d.nextInt(28);
-		int date2 = 1 + d.nextInt(12);
-		int date3 = 2017 + d.nextInt(3);
-		int date4 = d.nextInt(23);
-		int date5 = d.nextInt(59);
-		int date6 = d.nextInt(59);
-		Entity p = new Entity("Petition", date1+""+date2+""+date3+""+date4+""+date5+""+date6+""+emailUser);*/
-		
-		Entity p = new Entity("Petition", formatter.format(date)+":"+ user.getEmail());
+		//Entity p = new Entity("Petition", Long.MAX_VALUE-(new Date()).getTime()+":"+user.getEmail());
+		Entity p = new Entity("Petition", Long.MAX_VALUE-(new Date()).getTime()+":"+"U1001");
 		p.setProperty("dateC", formatter.format(date));
 		p.setProperty("etat", "Ouverte");
-		p.setProperty("idAuteur", user.getEmail());
-		p.setProperty("nbSignature", 0);
+		//p.setProperty("idAuteur", user.getEmail());
+		p.setProperty("idAuteur", "U1001");
+		p.setProperty("nbSignature", 10000);
 		p.setProperty("probleme", cp.petProbleme);
 		p.setProperty("titre", cp.petName);
 
