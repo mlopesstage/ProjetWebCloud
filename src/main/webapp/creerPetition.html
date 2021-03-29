@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Top petitions</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+<script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+<script src="https://unpkg.com/mithril/mithril.js"></script>
+
+</head>
+<body>
+
+<script>
+
+var CreatePetView = {
+	petName:"",
+	petProbleme:"",
+	view: function() {
+		return m("form", {
+		      onsubmit: function(e) {
+			        e.preventDefault()
+					if (petName="") {window.alert("Merci de saisir un nom de pétition !");} 
+					if (petProbleme="") {window.alert("Merci de saisir une description du problème !");}
+					CreatePet.postPet()
+			      }},
+			  [
+		    	m('div', {class:'field'},[
+		         m("label", {class:'label'},"Nom de la petition"),
+		         m('div',{class:'control'}, m("input[type=text]", {
+			         class:'input is-rounded',
+			         placeholder:"Votre nom de petition",
+			         required:"required",
+		             oninput: function(e) {CreatePetView.petName = e.target.value}})),
+		        ]),
+		      m('div',{class:'field'},[
+		    	  m("label", {class: 'label'},"Problème"),
+		          m('div',{class:'control'},m("input[type=textarea]", {
+			        class:'textarea',
+			        required:"required",
+			        placeholder:"Votre problème",
+		        	oninput: function(e) { CreatePetView.petProbleme = e.target.value }})),
+		        ]),
+		      m('div',{class:'control'},
+			      m('label',{class:'checkbox'},
+			    		  m("input", {type:'checkbox', required:"required"}), "Les informations saisies sont correctes et respectueuses")
+			  ),
+	          m('div',{class:'control'},
+	        		m("button[type=reset]", {class:'button is-warning'},
+		    		  	m("icon", {class:"fas fa-eraser"}), "Effacer"),
+	    		  	m("button[type=submit]", {class:'button is-success'},
+	  		    		m("icon", {class:"fas fa-check"}), "Envoyer")
+	          ),
+		    ])
+	}
+}
+
+
+var emailUser = { }
+
+var CreatePet = {
+		postPet: function() {
+		var data={'owner':emailUser,
+				'petName':CreatePetView.petName,
+				'petProbleme':CreatePetView.petProbleme}
+    	console.log("post:"+data)
+   		return m.request({
+       		method: "POST",
+       		url: "_ah/api/myApi/v1/creerpetition",
+           	params: data,
+       	})
+	    	.then(function(result) {
+   	 			console.log("got:",result)
+   	 			document.location.href="/espacePerso.html"
+   	 			//CreatePet.loadList()
+       	 	})
+     	}
+}
+
+var Hello = {
+	view: function() {
+		return m('div', {class:'container'}, [
+			m('nav',{class: 'navbar is-fixed-top'},[
+				m('div',{class: 'navbar-start'},[
+					m("site", {class: 'title'}, 'TinyPet'),
+					m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/topPet.html";}},
+						m("icon", {class:"fas fa-chart-line"}), "Top Petition"),
+					m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/creerPetition.html";}}, 
+						m("icon", {class:"fas fa-pen"}), "Créer petition"),
+					m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/espacePerso.html";}}, 
+						m("icon", {class:"fas fa-user"}), "Espace perso"),
+				]),
+				m('div',{class: 'navbar-end'},[
+					m('button', {class:"button is-warning is-rounded", onclick: function(e) { javascript:history.back();}},
+						m("icon", {class:"fas fa-undo"}), "Retour"),
+					m('button', {class:"button is-danger is-rounded", onclick: function(e) { signOut();}},
+						m("icon", {class:"fas fa-sign-out-alt"}), "Deconnexion"),
+				]),
+			]),
+			m("h1", {class: 'title is-ancestor'}, 'Création d\'une pétition'),
+			m("h1", {class: 'title is-ancestor'}, 'Création d\'une pétition'),
+			m("div", {class: 'tile'}, m('div',{class:'tile is-child box'},m(CreatePetView))),
+			m("footer", {class: 'has-text-centered'}, "Site réalisé par Luca GARIC et Michaël LOPES - V1.0"),
+		])
+	}
+}
+
+m.mount(document.body, Hello)
+</script>
+</body>
+</html>
