@@ -25,7 +25,7 @@ public class CreerPetition extends HttpServlet{
 		//Date date = new Date();
 		//SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 		
-		
+	
 		Random r = new Random();
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
@@ -42,7 +42,7 @@ public class CreerPetition extends HttpServlet{
 			String owner = "U"+r.nextInt(1000);
 			Entity p = new Entity("Petition", date1+""+date2+""+date3+""+date4+""+date5+""+date6+""+owner);
 			p.setProperty("titre", "Contre la COVID" + i);
-			p.setProperty("probleme", "La miage c'est difficile"+i);		
+			p.setProperty("probleme", "La miage c'est difficile"+i);
 			String datelocale = date1+"/"+date2+"/"+date3+" "+date4+":"+date5+":"+date6;
 			p.setProperty("dateC", datelocale);
 			//p.setProperty("dateC", formatter.format(date));

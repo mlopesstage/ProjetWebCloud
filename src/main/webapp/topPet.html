@@ -34,7 +34,7 @@ var TopPetView = {
 	oninit: TopPet.loadList,
 	view: function() {
 		return m('div', [
-			m('div',{class:'subtitle'},"Top 100 des pétitions les plus signées"),
+			m('div',{class:'title'},"Top 100 des pétitions les plus signées"),
 			m('table', {class:'table is-striped'},[
 				m('tr', [
 					m('th', {width:"20%"}, "Titre"),
@@ -62,20 +62,37 @@ var TopPetView = {
 	}
 }
 
+function signOut() {
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+      console.log('User signed out.');
+      window.location.href="/topPet.html"
+    });
+}
+
 var Hello = {
 	view: function() {
 		return m('div', {class:'container'}, [
-			m("h1", {class: 'title'}, 'Top 100 des pétitions'),
-			m('div',{class: 'navbar-end'},[
-				m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/creerpetition.html";}}, "Créer petition"),
-				m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/espacePerso.html";}}, "Espace perso"),
+			m('nav',{class: 'navbar is-fixed-top'},[
+				m('div',{class: 'navbar-start'},[
+					m("site", {class: 'title'}, 'TinyPet'),
+					m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/topPet.html";}},
+						m("icon", {class:"fas fa-chart-line"}), "Top Petition"),
+					m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/creerPetition.html";}}, 
+						m("icon", {class:"fas fa-pen"}), "Créer petition"),
+					m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/espacePerso.html";}}, 
+						m("icon", {class:"fas fa-user"}), "Espace perso"),
+				]),
+				m('div',{class: 'navbar-end'},[
+					m('button', {class:"button is-warning is-rounded", onclick: function(e) { javascript:history.back();}},
+						m("icon", {class:"fas fa-undo"}), "Retour"),
+					m('button', {class:"button is-danger is-rounded", onclick: function(e) { signOut();}},
+						m("icon", {class:"fas fa-sign-out-alt"}), "Deconnexion"),
+				]),
 			]),
-			m('div',{class: 'navbar-end is-ancestor'},[
-				m("div", {class: 'tile'}, m('div',{class:'tile is-child box'},m(TopPetView))),
-			]),
-			m('div',{class: 'buttons is-right'},[
-				m('button', {class:"button is-warning is-rounded", onclick: function(e) { javascript:history.back();}}, "Retour"),
-			]),
+			m("div", {class: 'title'}, m("h1", {class: 'title'}, 'Top 100 des pétitions')),
+			m("div", {class: 'tile'}, m('div',{class:'tile is-child box'},m(TopPetView))),
+			m("footer", {class: 'has-text-centered'}, "Site réalisé par Luca GARIC et Michaël LOPES - V1.0"),
 		])
 	}
 }

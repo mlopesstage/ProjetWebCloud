@@ -1,12 +1,22 @@
 package foo;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
 import com.google.api.server.spi.config.Named;
+import com.google.api.server.spi.auth.common.User;
 import com.google.api.server.spi.config.ApiMethod.HttpMethod;
+import com.google.api.server.spi.response.UnauthorizedException;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -34,7 +44,6 @@ import com.google.appengine.api.datastore.Query.SortDirection;
      )
 
 public class PetitionEndpoint {
-
 
 	@ApiMethod(name = "signedpet", httpMethod = HttpMethod.GET)
 	public List<Entity> signedpet() {
@@ -133,6 +142,29 @@ public class PetitionEndpoint {
         } catch (EntityNotFoundException e) {
         	System.out.println("<li> ERROR <li>"); 
         }
+		return p;
+	}
+	
+	@ApiMethod(name = "creerpetition", httpMethod = HttpMethod.POST)
+	public Entity creerpetition(User user, CreerPetition1 cp) {
+
+		Date date = new Date();
+		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+		
+		//Entity p = new Entity("Petition", Long.MAX_VALUE-(new Date()).getTime()+":"+user.getEmail());
+		Entity p = new Entity("Petition", Long.MAX_VALUE-(new Date()).getTime()+":"+"U1001");
+		p.setProperty("dateC", formatter.format(date));
+		p.setProperty("etat", "Ouverte");
+		//p.setProperty("idAuteur", user.getEmail());
+		p.setProperty("idAuteur", "U1001");
+		p.setProperty("nbSignature", 0);
+		p.setProperty("probleme", cp.petProbleme);
+		p.setProperty("titre", cp.petName);
+
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		Transaction txn = datastore.beginTransaction();
+		datastore.put(p);
+		txn.commit();
 		return p;
 	}
 }

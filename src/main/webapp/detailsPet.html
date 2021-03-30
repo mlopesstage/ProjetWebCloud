@@ -79,7 +79,144 @@ var DetailsPetView = {
 	oninit: DetailsPet.loadList,
 	view: function() {
 		return m('div', [
-			m('div',{class:'subtitle'},"Détails de cette pétition"),
+			m('div',{class:'title'},"Détails de la pétition"),
+			DetailsPet.list.map(function(item) {
+				/*if(item.properties.idAuteur == "U1001" && item.properties.etat == "Ouverte") {
+					return m('table', {class:'table is-striped'},[
+						m('tr', [
+							m('th', "Titre"), 
+							m('td', m('label', item.properties.titre)),	    
+						]),
+						m('tr', [
+							m('th', "Date de création"),
+							m('td', m('label', item.properties.dateC)),	    		    
+						]),
+						m('tr', [
+							m('th', "Auteur"),
+							m('td', m('label', item.properties.idAuteur)),    		    
+						]),
+						m('tr', [
+							m('th', "Probleme"),
+							m('td', m('label', item.properties.probleme)),    		    
+						]),
+						m('tr', [
+							m('th', "Signatures"),
+							m('td', m('label', item.properties.nbSignature)),	    		    
+						]),
+						m('tr', [
+							m('th', "Tags"),
+							m('td', m('label', item.properties.tags)),	    		    
+						]),
+						m('tr', [
+							m('th', "Etat"),
+							m('td', m('label', item.properties.etat)),   		    
+						]),
+					])//,
+					
+					/*m('button',{
+						class: 'button is-danger is-rounded',
+						onclick: function(e) {FermerPet.loadList()}					        	
+					},"Fermer Petition")*/
+				/*	
+				} else if (!(item.properties.idSignataire.includes("U1001")) && item.properties.etat == "Ouverte") {
+					return m('table', {class:'table is-striped'},[
+						m('tr', [
+							m('th', "Titre"), 
+							m('td', m('label', item.properties.titre)),	    
+						]),
+						m('tr', [
+							m('th', "Date de création"),
+							m('td', m('label', item.properties.dateC)),	    		    
+						]),
+						m('tr', [
+							m('th', "Auteur"),
+							m('td', m('label', item.properties.idAuteur)),    		    
+						]),
+						m('tr', [
+							m('th', "Probleme"),
+							m('td', m('label', item.properties.probleme)),    		    
+						]),
+						m('tr', [
+							m('th', "Signatures"),
+							m('td', m('label', item.properties.nbSignature)),	    		    
+						]),
+						m('tr', [
+							m('th', "Tags"),
+							m('td', m('label', item.properties.tags)),	    		    
+						]),
+						m('tr', [
+							m('th', "Etat"),
+							m('td', m('label', item.properties.etat)),   		    
+						]),
+					]),
+					
+					m('button',{
+						class: 'button is-primary is-rounded',
+						onclick: function(e) {SignerPet.loadList()}					        	
+					},"Signer Petition")
+				} else {
+					return m('table', {class:'table is-striped'},[
+						m('tr', [
+							m('th', "Titre"), 
+							m('td', m('label', item.properties.titre)),	    
+						]),
+						m('tr', [
+							m('th', "Date de création"),
+							m('td', m('label', item.properties.dateC)),	    		    
+						]),
+						m('tr', [
+							m('th', "Auteur"),
+							m('td', m('label', item.properties.idAuteur)),    		    
+						]),
+						m('tr', [
+							m('th', "Probleme"),
+							m('td', m('label', item.properties.probleme)),    		    
+						]),
+						m('tr', [
+							m('th', "Signatures"),
+							m('td', m('label', item.properties.nbSignature)),	    		    
+						]),
+						m('tr', [
+							m('th', "Tags"),
+							m('td', m('label', item.properties.tags)),	    		    
+						]),
+						m('tr', [
+							m('th', "Etat"),
+							m('td', m('label', item.properties.etat)),   		    
+						]),
+					]),
+					
+					m('button',{
+						class: 'button is-primary is-danger',
+						onclick: function(e) {SignerPet.loadList()} //mettre non cliquable
+					},"Impossible")
+				}
+			}),
+				
+			*/
+			//V2
+			/*DetailsPet.list.map(function(item) {
+				if(item.properties.idAuteur == "U1001" && item.properties.etat == "Ouverte") {
+					return m('button',{
+						class: 'button is-danger is-rounded',
+						onclick: function(e) {FermerPet.loadList()}					        	
+					},"Fermer Petition")
+				} else if (!(item.properties.idSignataire.includes("U1001")) && item.properties.etat == "Ouverte") {
+					return m('button',{
+						class: 'button is-primary is-rounded',
+						onclick: function(e) {SignerPet.loadList()}					        	
+					},"Signer Petition")
+				} else {
+					return m('button',{
+						class: 'button is-primary is-danger',
+						onclick: function(e) {SignerPet.loadList()} //mettre non cliquable
+					},"Impossible")
+				}
+			})*/
+			
+			
+			//V1
+			m('div',{class:'title'},"Détails de la pétition"),
 			m('table', {class:'table is-striped'},[
 				m('tr', [
 					m('th', {width:"20%"}, "Titre"), 
@@ -92,9 +229,8 @@ var DetailsPetView = {
 					m('th', {width:"5%"}, "Signer"),
 				]),
 				DetailsPet.list.map(function(item) {
-
 					if(item.properties.idAuteur == "U1001" && item.properties.etat == "Ouverte") {
-						return m('tr', [	
+						return m('tr', [
 							m('td', m('label', item.properties.titre)),
 							m('td', m('label', item.properties.dateC)),
 							m('td', m('label', item.properties.idAuteur)),
@@ -107,7 +243,7 @@ var DetailsPetView = {
 								onclick: function(e) {FermerPet.loadList()}					        	
 							},"Fermer"),		    		    
 						])				    			    				    						    		
-					} else if (!(item.properties.idSignataire.includes(Profile.email)) && (Profile.email != null) && item.properties.etat == "Ouverte") {
+					} else if (!(item.properties.idSignataire.includes(Profile.email)) && (Profile.email != null) && item.properties.etat == "Ouverte") {					
 						return m('tr', [	
 							m('td', m('label', item.properties.titre)),
 							m('td', m('label', item.properties.dateC)),
@@ -133,7 +269,7 @@ var DetailsPetView = {
 							m('td', m('label', {style: {color: "red"}}, "Impossible")),				    		    				        		
 						])		
 					}				  				   			       			        				     
-				})			   
+				})
 			])
 		])
 	}
@@ -163,23 +299,32 @@ function signOut() {
 var Hello = {
 	view: function() {
 		return m('div', {class:'container'}, [
-			m("h1", {class: 'title'}, 'Détails de la pétition'),			
-			m('div',{class: 'navbar-end'},[
-				m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/index.html";}}, "Menu"),
-				m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/creerpetition.html";}}, "Créer petition"),
-				m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/espacePerso.html";}}, "Espace perso"),
-				m("div", {				   
+				m("div", {	
+					   "style": "display:none",
 			      	   "class":"g-signin2",
 			      	   "data-theme":"dark",
-			      	   "data-onsuccess": "onSignIn"}),
-			    m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { signOut()}}, "Deconnexion"),  	   
+			      	   "data-onsuccess": "onSignIn"}),  	   
 			]),
-			m('div',{class: 'navbar-end is-ancestor'},[
-				m("div", {class: 'tile'}, m('div',{class:'tile is-child box'},m(DetailsPetView))),
+			m('nav',{class: 'navbar is-fixed-top'},[
+				m('div',{class: 'navbar-start'},[
+					m("site", {class: 'title'}, 'TinyPet'),
+					m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/index.html";}},
+						m("icon", {class:"fas fa-chart-line"}), "Top Petition"),
+					m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/creerPetition.html";}}, 
+						m("icon", {class:"fas fa-pen"}), "Créer petition"),
+					m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/espacePerso.html";}}, 
+						m("icon", {class:"fas fa-user"}), "Espace perso"),
+				]),
+				m('div',{class: 'navbar-end'},[
+					m('button', {class:"button is-warning is-rounded", onclick: function(e) { javascript:history.back();}},
+						m("icon", {class:"fas fa-undo"}), "Retour"),
+					m('button', {class:"button is-danger is-rounded", onclick: function(e) { signOut();}},
+						m("icon", {class:"fas fa-sign-out-alt"}), "Deconnexion"),
+				]),
 			]),
-			m('div',{class: 'buttons is-right'},[
-				m('button', {class:"button is-warning is-rounded", onclick: function(e) { javascript:history.back();}}, "Retour"),
-			]),
+			m("h1", {class: 'title is-ancestor'}, 'Détails de la pétition'),
+			m("div", {class: 'tile'}, m('div',{class:'tile is-child box'},m(DetailsPetView))),
+			m("footer", {class: 'has-text-centered'}, "Site réalisé par Luca GARIC et Michaël LOPES - V1.0"),
 		])
 		
 	}
