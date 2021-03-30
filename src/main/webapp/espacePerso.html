@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta name="google-signin-scope" content="profile email">
+<meta name="google-signin-client_id" content="46330245209-9jejvn58229dabq46josvavn3crj9ogl.apps.googleusercontent.com">
+<script src="https://apis.google.com/js/platform.js"async defer></script>
 <meta charset="UTF-8">
 <title>Espace personnel</title>
-<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
@@ -14,6 +16,7 @@
 <body>
 
 <script>
+
 var MyPetSigned = {
 	list: [],
 	loadList: function() {
@@ -58,12 +61,20 @@ var MyPetSignedView = {
 						m('td', m('label', item.properties.dateC)),
 						m('td', m('label', troncatstring(item))),
 						m('td', m('label', item.properties.nbSignature)),
-						m('button', m('a[href=/detailsPet.html?'+item.key.name+']', "Voir plus")),
+						m('button', {class:"button is-primary is-rounded is-small", onclick: function(e) { document.location.href="/detailsPet.html?"+item.key.name;}}, "Voir plus"),
 					])
 				})
 			])
 		])
 	}
+}
+
+function signOut() {
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+      console.log('User signed out.');
+      window.location.href="index.html";
+    });
 }
 
 var MyPetCreated = {
@@ -75,7 +86,7 @@ var MyPetCreated = {
 	})
 	.then(function(result) {
 		MyPetCreated.list = result.items
-		console.log("got:",result.items)
+		console.log("thatskindoftrue:",sessionStorage)
 		// m.redraw(true) 
 		})
 	 }
@@ -95,6 +106,7 @@ var MyPetCreatedView = {
 				m('th', {width:"10%"}, "Etat"),
 				m('th', {width:"10%"}, "Détails"),
 				]),
+				
 				MyPetCreated.list.map(function(item) {
 					return m("tr", [
 						m('td', m('label', item.properties.titre)),
@@ -102,7 +114,7 @@ var MyPetCreatedView = {
 						m('td', m('label', troncatstring(item))),
 						m('td', m('label', item.properties.nbSignature)),
 						m('td', m('label', item.properties.etat)),
-						m('button', m('a[href=/detailsPet.html?'+item.key.name+']', "Voir plus")),
+						m('button', {class:"button is-primary is-rounded is-small", onclick: function(e) { document.location.href="/detailsPet.html?"+item.key.name;}}, "Voir plus"),
 					])
 				})
 			])
@@ -110,18 +122,52 @@ var MyPetCreatedView = {
 	}
 }
 
+
+var Hello = {
+	view: function(){
+		return m('div', {class:'container'}, [
+			m("h1", {class: 'title'}, 'Mon Espace Personnel'),
+			m('div',{class: 'navbar-end'},[
+				m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/creerpetition.html";}}, "Créer petition"),
+				m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/topPet.html";}}, "Top Petition"),
+				m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { signOut()}}, "Deconnexion"),
+				m("div", {
+					   "style": "display:none",
+			      	   "class":"g-signin2",
+			      	   "data-theme":"dark",
+			      	   "data-onsuccess": "onSignIn"}),
+			]),
+			m('div',{class: 'navbar-end is-ancestor'},[
+				m("div", {class: 'tile'}, m('div',{class:'tile is-child box'},m(MyPetSignedView))),
+				m("div", {class: 'tile'}, m('div',{class:'tile is-child box'},m(MyPetCreatedView))),
+			]),
+			m('div',{class: 'buttons is-right'},[
+				m('button', {class:"button is-warning is-rounded", onclick: function(e) { javascript:history.back();}}, "Retour"),
+			]),
+		])	
+	}
+}
+
+/*
 var Hello = {
 	view: function() {
 		return m('div', {class:'container'}, [
 			m("h1", {class: 'title'}, 'Mon Espace Personnel'),
-			m('div',{class: 'tile is-ancestor'},[
+			m('div',{class: 'navbar-end'},[
+				m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/creerpetition.html";}}, "Créer petition"),
+				m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/topPet.html";}}, "Top Petition"),
+			]),
+			m('div',{class: 'navbar-end is-ancestor'},[
 				m("div", {class: 'tile'}, m('div',{class:'tile is-child box'},m(MyPetSignedView))),
 				m("div", {class: 'tile'}, m('div',{class:'tile is-child box'},m(MyPetCreatedView))),
-			])
+			]),
+			m('div',{class: 'buttons is-right'},[
+				m('button', {class:"button is-warning is-rounded", onclick: function(e) { javascript:history.back();}}, "Retour"),
+			]),
 		])
 	}
 }
-
+*/
 m.mount(document.body, Hello)
 </script>
 </body>

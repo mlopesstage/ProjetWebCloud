@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 	<head>
-		<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
-		<title>ProjetWebCloud</title>
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
 		<meta name="google-signin-scope" content="profile email">
 		<meta name="google-signin-client_id" content="46330245209-9jejvn58229dabq46josvavn3crj9ogl.apps.googleusercontent.com">
 		<script src="https://apis.google.com/js/platform.js" async defer></script>
+		<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />	
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
 		<script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
 		<script src="https://unpkg.com/mithril/mithril.js"></script>
+		<title>ProjetWebCloud</title>
  	</head>
  	<body>
 
 		<div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
-		
+
 		<script>
 		
 		var accueil = {
@@ -23,14 +23,20 @@
 						m('h2', "V1.23"),
 						m('h4', "Menu principal du site (PROVISOIRE):"),
 						m('h4', "La base est déjà peuplée de 250 pétitions (pour info)"),
-						m('button', m('a[href=/creerpetition]', "Créer une pétition (Pour l'instant permet de peupler la base de 250 pétitions)")),
-						m('button', m('a[href=/espacePerso.html]', "Affiche mon espace personnel (pet créées + signées)")),
-						m('button', m('a[href=/topPet.html]', "Affiche les 100 pétitions les plus signées")),
 						m("div", {
 					      	   "class":"g-signin2",
 					      	   "data-theme":"dark",
 					      	   "data-onsuccess": "onSignIn"}),
-					    m("button",{class:"button", onclick: function(e) { signOut()}},"Deconnexion"), 	   
+					    m("button",{class:"button", onclick: function(e) { signOut()}},"Deconnexion"),
+					    m('div',{class: 'navbar-end'},[
+					    	m('button', m('a[href=/creerpetition]', "Créer une pétition (Pour l'instant permet de peupler la base de 250 pétitions)")),
+    						m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/creerpetition.html";}}, "Créer petition"),
+    						m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { checkRedirect(); }}, "Espace perso"),
+    					]),
+    					m('div',{class: 'navbar-end is-ancestor'},[
+    						m("div", {class: 'tile'}, m('div',{class:'tile is-child box'},m(TopPetView))),
+    					]),
+					    
 					])
 				}
 			}
@@ -41,6 +47,8 @@
 			  Profile.name=profile.getName();
 			  Profile.email=profile.getEmail();
 			  Profile.ID=googleUser.getAuthResponse().id_token;
+			  sessionStorage.setItem('Profile',JSON.stringify(Profile));
+			  console.log(sessionStorage);
 			  //window.location.href = "/topPet.html";
 	      }
 		
@@ -48,10 +56,18 @@
 	            var auth2 = gapi.auth2.getAuthInstance();
 	            auth2.signOut().then(function () {
 	              console.log('User signed out.');
-	              m.route.set("/login")
+	              //m.route.set("/login")
+	              sessionStorage.clear();      
+	              console.log(sessionStorage);
 	            });
 	        }
-	      
+	      function checkRedirect(){
+	    	  if(gapi.auth2.getAuthInstance().isSignedIn.get()){
+	    		  document.location.href="/espacePerso.html";
+	    	  }else{
+	    		  window.alert("lol no");
+	    	  }
+	      }
 	      var Profile={
 	    		  name:"",
 	    		  email:"",
@@ -64,21 +80,59 @@
 	    			])
 	    		  }
 	      }
-	      
-	      var Login = {
-	    		  view: function() {
-	    		 		return m('a[href=/topPet.html]')
-	    		    }
+
+
+	      var TopPet = {
+	    			list: [],
+	    			loadList: function() {
+	    				return m.request({
+	    					method: "GET",
+	    					url: "_ah/api/myApi/v1/toppetition/"
+	    				})
+	    				.then(function(result) {
+	    					TopPet.list = result.items
+	    					console.log("got:",result.items)
+	    					// m.redraw(true) 
+	    				})
+	    			}
 	    		}
+
+	    		var troncstring = {}
+
+	    		var TopPetView = {
+	    			oninit: TopPet.loadList,
+	    			view: function() {
+	    				return m('div', [
+	    					m('div',{class:'subtitle'},"Top 100 des pétitions les plus signées"),
+	    					m('table', {class:'table is-striped'},[
+	    						m('tr', [
+	    							m('th', {width:"20%"}, "Titre"),
+	    							m('th', {width:"15%"}, "Date de création"),
+	    							m('th', {width:"45%"}, "Probleme"),
+	    							m('th', {width:"10%"}, "Signatures"),
+	    							m('th', {width:"10%"}, "Détails"),
+	    						]),
+	    						TopPet.list.map(function(item) {
+	    							if(item.properties.probleme.length > 100){
+	    								troncstring = item.properties.probleme.substring(0,100)+"..."
+	    							} else {
+	    								troncstring = item.properties.probleme
+	    							}
+	    							return m("tr", [ 
+	    								m('td', m('label', item.properties.titre)),
+	    								m('td', m('label', item.properties.dateC)),
+	    								m('td', m('label', troncstring)),
+	    								m('td', m('label', item.properties.nbSignature)),
+	    								m('button', {class:"button is-primary is-rounded is-small", onclick: function(e) { document.location.href="/detailsPet.html?"+item.key.name;}}, "Voir plus"),
+	    							])
+	    						})
+	    					])
+	    				])
+	    			}
+	    		}
+
 	      
-	      m.route(document.body, "/secret", {
-	    	  "/secret": { onmatch: function() {
-	    	            	if (Profile.ID=="") {m.route.set("/login")}
-	    	            	else return Profile
-	    	        		}},
-	    	  "/login": accueil
-	    	})
+	      m.mount(document.body, accueil) 
 	    </script>
-    
 	</body>
 </html>

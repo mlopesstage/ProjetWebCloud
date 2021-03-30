@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Top petitions</title>
+<meta name="google-signin-scope" content="profile email">
+<meta name="google-signin-client_id" content="46330245209-9jejvn58229dabq46josvavn3crj9ogl.apps.googleusercontent.com">
+<script src="https://apis.google.com/js/platform.js"async defer></script>
 <meta charset="utf-8">
+<title>Top petitions</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
@@ -20,6 +22,11 @@ var idobj = currenturl.split('?')[1]
 var idurl = "_ah/api/myApi/v1/detailpet/"+idobj
 var idsignerpeturl = "_ah/api/myApi/v1/signerpet/"+idobj
 var idfermerpeturl = "_ah/api/myApi/v1/fermerpet/"+idobj
+var Profile={
+		  name:"",
+		  email:"",
+		  ID:"",
+}
 
 var DetailsPet = {
 	list: [],   
@@ -69,66 +76,6 @@ var FermerPet = {
 }
 
 var DetailsPetView = {
-<<<<<<< HEAD
-		  oninit: DetailsPet.loadList,
-		  view: function() {
-		   	return m('div', [
-			  m('div',{class:'subtitle'},"Détails de cette pétition"),
-			  m('table', {class:'table is-striped'},[
-			    m('tr', [
-			      m('th', {width:"20%"}, "Titre"), 
-			      m('th', {width:"15%"}, "Date de création"),
-			      m('th', {width:"5%"}, "Auteur"),
-			      m('th', {width:"40%"}, "Probleme"),
-			      m('th', {width:"5%"}, "Signatures"),
-			      m('th', {width:"5%"}, "Tags"),
-			      m('th', {width:"5%"}, "Etat"),
-			      m('th', {width:"5%"}, "Signer"),
-			    ]),
-			    DetailsPet.list.map(function(item) {			  			      			   
-		    		if(item.properties.idAuteur == "U1001" && item.properties.etat == "Ouverte"){
-				    	return m('tr', [	
-			    			m('td', m('label', item.properties.titre)),
-			    		    m('td', m('label', item.properties.dateC)),
-			    		    m('td', m('label', item.properties.idAuteur)),
-			    		    m('td', m('label', item.properties.probleme)),
-			    		    m('td', m('label', item.properties.nbSignature)),
-			    		    m('td', m('label', item.properties.tags)),
-			    		    m('td', m('label', item.properties.etat)),
-			    		    m('button',{
-					        	class: 'button is-link',
-					        	onclick: function(e) {FermerPet.loadList()}					        	
-					        },"Fermer"),		    		    
-					     ])				    			    				    						    		
-			   		 }else if (!(item.properties.idSignataire.includes("U1001")) && item.properties.etat == "Ouverte"){
-			    	 	return m('tr', [	
-				    		m('td', m('label', item.properties.titre)),
-			    		    m('td', m('label', item.properties.dateC)),
-			    		    m('td', m('label', item.properties.idAuteur)),
-			    		    m('td', m('label', item.properties.probleme)),
-			    		    m('td', m('label', item.properties.nbSignature)),
-			    		    m('td', m('label', item.properties.tags)),
-			    		    m('td', m('label', item.properties.etat)),
-			    		    m('button',{
-					        	class: 'button is-link',
-					        	onclick: function(e) {SignerPet.loadList()}					        	
-					        },"Signer"),		    		    
-				    	 ])
-			    	}else{				    		
-				    	 return m('tr', [	
-				    			m('td', m('label', item.properties.titre)),
-				    		    m('td', m('label', item.properties.dateC)),
-				    		    m('td', m('label', item.properties.idAuteur)),
-				    		    m('td', m('label', item.properties.probleme)),
-				    		    m('td', m('label', item.properties.nbSignature)),
-				    		    m('td', m('label', item.properties.tags)),
-				    		    m('td', m('label', item.properties.etat)),
-				    		    m('td', m('label', {style: {color: "red"}}, "Impossible")),				    		    				        		
-				        ])		
-			    	}				  				   			       			        				     
-			    })			   
-			 ])
-=======
 	oninit: DetailsPet.loadList,
 	view: function() {
 		return m('div', [
@@ -156,11 +103,11 @@ var DetailsPetView = {
 							m('td', m('label', item.properties.tags)),
 							m('td', m('label', item.properties.etat)),
 							m('button',{
-								class: 'button is-link',
+								class: 'button is-danger is-rounded',
 								onclick: function(e) {FermerPet.loadList()}					        	
 							},"Fermer"),		    		    
 						])				    			    				    						    		
-					} else if (!(item.properties.idSignataire.includes("U1001")) && item.properties.etat == "Ouverte") {
+					} else if (!(item.properties.idSignataire.includes(Profile.email)) && (Profile.email != null) && item.properties.etat == "Ouverte") {
 						return m('tr', [	
 							m('td', m('label', item.properties.titre)),
 							m('td', m('label', item.properties.dateC)),
@@ -170,7 +117,7 @@ var DetailsPetView = {
 							m('td', m('label', item.properties.tags)),
 							m('td', m('label', item.properties.etat)),
 							m('button',{
-								class: 'button is-link',
+								class: 'button is-primary is-rounded',
 								onclick: function(e) {SignerPet.loadList()}					        	
 							},"Signer"),		    		    
 						])
@@ -188,20 +135,55 @@ var DetailsPetView = {
 					}				  				   			       			        				     
 				})			   
 			])
->>>>>>> b9cbd9e3a888e667eea22f002ad11ff0f0ee9a92
 		])
 	}
 }
 
+function onSignIn(googleUser) {
+    // Useful data for your client-side scripts:
+      var profile = googleUser.getBasicProfile();
+      Profile.email=profile.getEmail();
+      console.log("user signed in");
+      DetailsPetView;
+	
+  }
+
+function signOut() {
+    var auth2 = gapi.auth2.getAuthInstance();
+    console.log(Profile.email);
+    auth2.signOut().then(function () {
+      Profile.email="";
+      console.log('User signed out.');
+      console.log(Profile.email);
+    });
+}
+
+
+
 var Hello = {
 	view: function() {
 		return m('div', {class:'container'}, [
-			m("h1", {class: 'title'}, 'Détails de la pétition'),
-			m('div',{class: 'tile is-ancestor'},[
+			m("h1", {class: 'title'}, 'Détails de la pétition'),			
+			m('div',{class: 'navbar-end'},[
+				m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/index.html";}}, "Menu"),
+				m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/creerpetition.html";}}, "Créer petition"),
+				m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/espacePerso.html";}}, "Espace perso"),
+				m("div", {				   
+			      	   "class":"g-signin2",
+			      	   "data-theme":"dark",
+			      	   "data-onsuccess": "onSignIn"}),
+			    m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { signOut()}}, "Deconnexion"),  	   
+			]),
+			m('div',{class: 'navbar-end is-ancestor'},[
 				m("div", {class: 'tile'}, m('div',{class:'tile is-child box'},m(DetailsPetView))),
-			])         
+			]),
+			m('div',{class: 'buttons is-right'},[
+				m('button', {class:"button is-warning is-rounded", onclick: function(e) { javascript:history.back();}}, "Retour"),
+			]),
 		])
+		
 	}
+	
 }
 
 m.mount(document.body, Hello)
