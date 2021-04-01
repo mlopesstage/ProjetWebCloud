@@ -155,10 +155,17 @@ public class PetitionEndpoint {
 		Entity p = new Entity("Petition", Long.MAX_VALUE-(new Date()).getTime()+":"+"U1001");
 		p.setProperty("dateC", formatter.format(date));
 		p.setProperty("etat", "Ouverte");
+		HashSet<String> pset = new HashSet<String>();
+		
+		pset.add("U4012"); //A SUP
+		
+		p.setProperty("idSignataire", pset);
 		//p.setProperty("idAuteur", user.getEmail());
 		p.setProperty("idAuteur", "U1001");
 		p.setProperty("nbSignature", 0);
 		p.setProperty("probleme", cp.petProbleme);
+		HashSet<String> ftags = new HashSet<String>();
+		p.setProperty("tags", ftags);
 		p.setProperty("titre", cp.petName);
 
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();

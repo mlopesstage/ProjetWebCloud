@@ -74,7 +74,7 @@ var DetailsPetView = {
 		return m('div', [
 			m('div',{class:'title'},"Détails de la pétition"),
 			DetailsPet.list.map(function(item) {
-				/*if(item.properties.idAuteur == "U1001" && item.properties.etat == "Ouverte") {
+				if(item.properties.idAuteur == "U1001" && item.properties.etat == "Ouverte") {
 					return m('table', {class:'table is-striped'},[
 						m('tr', [
 							m('th', "Titre"), 
@@ -104,13 +104,12 @@ var DetailsPetView = {
 							m('th', "Etat"),
 							m('td', m('label', item.properties.etat)),   		    
 						]),
-					])//,
-					
-					/*m('button',{
-						class: 'button is-danger is-rounded',
-						onclick: function(e) {FermerPet.loadList()}					        	
-					},"Fermer Petition")*/
-				/*	
+						
+						m('button',{
+							class: 'button is-danger is-rounded',
+							onclick: function(e) {FermerPet.loadList()}					        	
+						},"Fermer Petition")
+					])
 				} else if (!(item.properties.idSignataire.includes("U1001")) && item.properties.etat == "Ouverte") {
 					return m('table', {class:'table is-striped'},[
 						m('tr', [
@@ -141,12 +140,12 @@ var DetailsPetView = {
 							m('th', "Etat"),
 							m('td', m('label', item.properties.etat)),   		    
 						]),
-					]),
-					
-					m('button',{
-						class: 'button is-primary is-rounded',
-						onclick: function(e) {SignerPet.loadList()}					        	
-					},"Signer Petition")
+						
+						m('button',{
+							class: 'button is-primary is-rounded',
+							onclick: function(e) {SignerPet.loadList()}					        	
+						},"Signer Petition")
+					])
 				} else {
 					return m('table', {class:'table is-striped'},[
 						m('tr', [
@@ -177,16 +176,18 @@ var DetailsPetView = {
 							m('th', "Etat"),
 							m('td', m('label', item.properties.etat)),   		    
 						]),
-					]),
+						
+						m('button',{
+							class: 'button is-danger is-rounded',
+							disabled:"disabled"
+						},"Impossible")
+					])
 					
-					m('button',{
-						class: 'button is-primary is-danger',
-						onclick: function(e) {SignerPet.loadList()} //mettre non cliquable
-					},"Impossible")
+					
 				}
-			}),
+			})
 				
-			*/
+			
 			//V2
 			/*DetailsPet.list.map(function(item) {
 				if(item.properties.idAuteur == "U1001" && item.properties.etat == "Ouverte") {
@@ -209,7 +210,7 @@ var DetailsPetView = {
 			
 			
 			//V1
-			m('div',{class:'title'},"Détails de la pétition"),
+			/*m('div',{class:'title'},"Détails de la pétition"),
 			m('table', {class:'table is-striped'},[
 				m('tr', [
 					m('th', {width:"20%"}, "Titre"), 
@@ -263,7 +264,7 @@ var DetailsPetView = {
 						])		
 					}				  				   			       			        				     
 				})
-			])
+			])*/
 		])
 	}
 }
