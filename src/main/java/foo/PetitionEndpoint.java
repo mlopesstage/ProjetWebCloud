@@ -27,6 +27,7 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Transaction;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.datastore.Query.SortDirection;
@@ -158,7 +159,6 @@ public class PetitionEndpoint {
 		HashSet<String> pset = new HashSet<String>();
 		
 		pset.add("U4012"); //A SUP
-		
 		p.setProperty("idSignataire", pset);
 		//p.setProperty("idAuteur", user.getEmail());
 		p.setProperty("idAuteur", "U1001");

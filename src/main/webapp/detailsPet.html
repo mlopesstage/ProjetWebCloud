@@ -74,197 +74,61 @@ var DetailsPetView = {
 		return m('div', [
 			m('div',{class:'title'},"Détails de la pétition"),
 			DetailsPet.list.map(function(item) {
-				if(item.properties.idAuteur == "U1001" && item.properties.etat == "Ouverte") {
-					return m('table', {class:'table is-striped'},[
-						m('tr', [
-							m('th', "Titre"), 
-							m('td', m('label', item.properties.titre)),	    
-						]),
-						m('tr', [
-							m('th', "Date de création"),
-							m('td', m('label', item.properties.dateC)),	    		    
-						]),
-						m('tr', [
-							m('th', "Auteur"),
-							m('td', m('label', item.properties.idAuteur)),    		    
-						]),
-						m('tr', [
-							m('th', "Probleme"),
-							m('td', m('label', item.properties.probleme)),    		    
-						]),
-						m('tr', [
-							m('th', "Signatures"),
-							m('td', m('label', item.properties.nbSignature)),	    		    
-						]),
-						m('tr', [
-							m('th', "Tags"),
-							m('td', m('label', item.properties.tags)),	    		    
-						]),
-						m('tr', [
-							m('th', "Etat"),
-							m('td', m('label', item.properties.etat)),   		    
-						]),
-						
-						m('button',{
-							class: 'button is-danger is-rounded',
-							onclick: function(e) {FermerPet.loadList()}					        	
-						},"Fermer Petition")
-					])
-				} else if (!(item.properties.idSignataire.includes("U1001")) && item.properties.etat == "Ouverte") {
-					return m('table', {class:'table is-striped'},[
-						m('tr', [
-							m('th', "Titre"), 
-							m('td', m('label', item.properties.titre)),	    
-						]),
-						m('tr', [
-							m('th', "Date de création"),
-							m('td', m('label', item.properties.dateC)),	    		    
-						]),
-						m('tr', [
-							m('th', "Auteur"),
-							m('td', m('label', item.properties.idAuteur)),    		    
-						]),
-						m('tr', [
-							m('th', "Probleme"),
-							m('td', m('label', item.properties.probleme)),    		    
-						]),
-						m('tr', [
-							m('th', "Signatures"),
-							m('td', m('label', item.properties.nbSignature)),	    		    
-						]),
-						m('tr', [
-							m('th', "Tags"),
-							m('td', m('label', item.properties.tags)),	    		    
-						]),
-						m('tr', [
-							m('th', "Etat"),
-							m('td', m('label', item.properties.etat)),   		    
-						]),
-						
-						m('button',{
-							class: 'button is-primary is-rounded',
-							onclick: function(e) {SignerPet.loadList()}					        	
-						},"Signer Petition")
-					])
-				} else {
-					return m('table', {class:'table is-striped'},[
-						m('tr', [
-							m('th', "Titre"), 
-							m('td', m('label', item.properties.titre)),	    
-						]),
-						m('tr', [
-							m('th', "Date de création"),
-							m('td', m('label', item.properties.dateC)),	    		    
-						]),
-						m('tr', [
-							m('th', "Auteur"),
-							m('td', m('label', item.properties.idAuteur)),    		    
-						]),
-						m('tr', [
-							m('th', "Probleme"),
-							m('td', m('label', item.properties.probleme)),    		    
-						]),
-						m('tr', [
-							m('th', "Signatures"),
-							m('td', m('label', item.properties.nbSignature)),	    		    
-						]),
-						m('tr', [
-							m('th', "Tags"),
-							m('td', m('label', item.properties.tags)),	    		    
-						]),
-						m('tr', [
-							m('th', "Etat"),
-							m('td', m('label', item.properties.etat)),   		    
-						]),
-						
-						m('button',{
-							class: 'button is-danger is-rounded',
-							disabled:"disabled"
-						},"Impossible")
-					])
-					
-					
-				}
-			})
+				return m('table', {class:'table is-striped'},[
+					m('tr', [
+						m('th', "Titre"), 
+						m('td', m('label', item.properties.titre)),	    
+					]),
+					m('tr', [
+						m('th', "Date de création"),
+						m('td', m('label', item.properties.dateC)),	    		    
+					]),
+					m('tr', [
+						m('th', "Auteur"),
+						m('td', m('label', item.properties.idAuteur)),    		    
+					]),
+					m('tr', [
+						m('th', "Probleme"),
+						m('td', m('label', item.properties.probleme)),    		    
+					]),
+					m('tr', [
+						m('th', "Signatures"),
+						m('td', m('label', item.properties.nbSignature)),	    		    
+					]),
+					m('tr', [
+						m('th', "Tags"),
+						m('td', m('label', item.properties.tags)),	    		    
+					]),
+					m('tr', [
+						m('th', "Etat"),
+						m('td', m('label', item.properties.etat)),   		    
+					]),
 				
-			
-			//V2
-			/*DetailsPet.list.map(function(item) {
-				if(item.properties.idAuteur == "U1001" && item.properties.etat == "Ouverte") {
-					return m('button',{
-						class: 'button is-danger is-rounded',
-						onclick: function(e) {FermerPet.loadList()}					        	
-					},"Fermer Petition")
-				} else if (!(item.properties.idSignataire.includes("U1001")) && item.properties.etat == "Ouverte") {
-					return m('button',{
-						class: 'button is-primary is-rounded',
-						onclick: function(e) {SignerPet.loadList()}					        	
-					},"Signer Petition")
-				} else {
-					return m('button',{
-						class: 'button is-primary is-danger',
-						onclick: function(e) {SignerPet.loadList()} //mettre non cliquable
-					},"Impossible")
-				}
-			})*/
-			
-			
-			//V1
-			/*m('div',{class:'title'},"Détails de la pétition"),
-			m('table', {class:'table is-striped'},[
-				m('tr', [
-					m('th', {width:"20%"}, "Titre"), 
-					m('th', {width:"15%"}, "Date de création"),
-					m('th', {width:"5%"}, "Auteur"),
-					m('th', {width:"40%"}, "Probleme"),
-					m('th', {width:"5%"}, "Signatures"),
-					m('th', {width:"5%"}, "Tags"),
-					m('th', {width:"5%"}, "Etat"),
-					m('th', {width:"5%"}, "Signer"),
-				]),
-				DetailsPet.list.map(function(item) {
-					if(item.properties.idAuteur == "U1001" && item.properties.etat == "Ouverte") {
-						return m('tr', [
-							m('td', m('label', item.properties.titre)),
-							m('td', m('label', item.properties.dateC)),
-							m('td', m('label', item.properties.idAuteur)),
-							m('td', m('label', item.properties.probleme)),
-							m('td', m('label', item.properties.nbSignature)),
-							m('td', m('label', item.properties.tags)),
-							m('td', m('label', item.properties.etat)),
-							m('button',{
+					DetailsPet.list.map(function(item) {
+						if(item.properties.idAuteur == "U1001" && item.properties.etat == "Ouverte") {
+							return m('button',{
 								class: 'button is-danger is-rounded',
 								onclick: function(e) {FermerPet.loadList()}					        	
-							},"Fermer"),		    		    
-						])
-					} else if (!(item.properties.idSignataire.includes("U1001")) && item.properties.etat == "Ouverte") {
-						return m('tr', [	
-							m('td', m('label', item.properties.titre)),
-							m('td', m('label', item.properties.dateC)),
-							m('td', m('label', item.properties.idAuteur)),
-							m('td', m('label', item.properties.probleme)),
-							m('td', m('label', item.properties.nbSignature)),
-							m('td', m('label', item.properties.tags)),
-							m('td', m('label', item.properties.etat)),
-							m('button',{
+							},"Fermer Petition")
+						} else if (item.properties.idSignataire === undefined && item.properties.etat == "Ouverte") {
+							return m('button',{
 								class: 'button is-primary is-rounded',
 								onclick: function(e) {SignerPet.loadList()}					        	
-							},"Signer"),		    		    
-						])
-					} else {				    		
-						return m('tr', [	
-							m('td', m('label', item.properties.titre)),
-							m('td', m('label', item.properties.dateC)),
-							m('td', m('label', item.properties.idAuteur)),
-							m('td', m('label', item.properties.probleme)),
-							m('td', m('label', item.properties.nbSignature)),
-							m('td', m('label', item.properties.tags)),
-							m('td', m('label', item.properties.etat)),
-							m('td', m('label', {style: {color: "red"}}, "Impossible")),				    		    				        		
-						])		
-					}				  				   			       			        				     
-				})
-			])*/
+							},"Signer Petition")
+						} else if (!(item.properties.idSignataire.includes("U1001")) && item.properties.etat == "Ouverte") {
+							return m('button',{
+								class: 'button is-primary is-rounded',
+								onclick: function(e) {SignerPet.loadList()}					        	
+							},"Signer Petition")
+						} else {
+							return m('button',{
+								class: 'button is-danger is-rounded',
+								disabled:"disabled"
+							},"Impossible")
+						}
+					})
+				])
+			})
 		])
 	}
 }
