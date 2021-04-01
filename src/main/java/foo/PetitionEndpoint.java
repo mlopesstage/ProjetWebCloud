@@ -36,6 +36,8 @@ import com.google.appengine.api.datastore.Query.SortDirection;
      version = "v1",
      audiences = "46330245209-9jejvn58229dabq46josvavn3crj9ogl.apps.googleusercontent.com",
   	 clientIds = "46330245209-9jejvn58229dabq46josvavn3crj9ogl.apps.googleusercontent.com",
+  	 scopes = "https://www.googleapis.com/auth/userinfo.profile",
+  			
      namespace =
      @ApiNamespace(
 		   ownerDomain = "helloworld.example.com",
@@ -48,7 +50,7 @@ public class PetitionEndpoint {
 	@ApiMethod(name = "signedpet", httpMethod = HttpMethod.GET)
 	public List<Entity> signedpet() {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-		Query q = new Query("Petition").setFilter(new FilterPredicate("idSignataire", FilterOperator.EQUAL, "U1001"));
+		Query q = new Query("Petition").setFilter(new FilterPredicate("idSignataire", FilterOperator.EQUAL, "garic.luca@outlook.fr"));
 		PreparedQuery pq = datastore.prepare(q);
 		List<Entity> result = pq.asList(FetchOptions.Builder.withDefaults());
 		return result;
@@ -57,7 +59,7 @@ public class PetitionEndpoint {
 	@ApiMethod(name = "mycreatedpet", httpMethod = HttpMethod.GET)
 	public List<Entity> mycreatedpet() {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-		Query q = new Query("Petition").setFilter(new FilterPredicate("idAuteur", FilterOperator.EQUAL, "U1001"));
+		Query q = new Query("Petition").setFilter(new FilterPredicate("idAuteur", FilterOperator.EQUAL, "garic.luca@outlook.fr"));
 		PreparedQuery pq = datastore.prepare(q);
 		List<Entity> result = pq.asList(FetchOptions.Builder.withDefaults());
 		return result;
@@ -155,10 +157,16 @@ public class PetitionEndpoint {
 		Entity p = new Entity("Petition", Long.MAX_VALUE-(new Date()).getTime()+":"+"U1001");
 		p.setProperty("dateC", formatter.format(date));
 		p.setProperty("etat", "Ouverte");
-		//p.setProperty("idAuteur", user.getEmail());
-		p.setProperty("idAuteur", "U1001");
+		HashSet<String> pset = new HashSet<String>();		
+		pset.add("U4012"); //A SUP
+		
+		p.setProperty("idSignataire", pset);
+		//p.setProperty("idAuteur", cp.owner);
+		p.setProperty("idAuteur", user.getEmail());
 		p.setProperty("nbSignature", 0);
 		p.setProperty("probleme", cp.petProbleme);
+		HashSet<String> ftags = new HashSet<String>();
+		p.setProperty("tags", ftags);
 		p.setProperty("titre", cp.petName);
 
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();

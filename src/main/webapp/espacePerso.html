@@ -73,6 +73,7 @@ function signOut() {
     var auth2 = gapi.auth2.getAuthInstance();
     auth2.signOut().then(function () {
       console.log('User signed out.');
+      localStorage.clear();
       window.location.href="index.html";
     });
 }
@@ -125,38 +126,42 @@ var MyPetCreatedView = {
 
 var Hello = {
 	view: function(){
-		return m('div', {class:'container'}, [
-
-            m('nav',{class: 'navbar is-fixed-top'},[
-                m('div',{class: 'navbar-start'},[
-                    m("h1", {class: 'title'}, 'TinyPet'),
-                    m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/topPet.html";}},
-                        m("icon", {class:"fas fa-chart-line"}), "Top Petition"),
-                    m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/creerPetition.html";}}, 
-                        m("icon", {class:"fas fa-pen"}), "Créer petition"),
-                    m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/espacePerso.html";}}, 
-                        m("icon", {class:"fas fa-user"}), "Espace perso"),
-                    m("div", {
-                   	   "style": "display:none",
-                   	   "class":"g-signin2",
-                   	   "data-theme":"dark",
-                   	   "data-onsuccess": "onSignIn"}),                   
-                ]),
-                m('div',{class: 'navbar-end'},[
-                    m('button', {class:"button is-warning is-rounded", onclick: function(e) { javascript:history.back();}},
-                        m("icon", {class:"fas fa-undo"}), "Retour"),
-                    m('button', {class:"button is-danger is-rounded", onclick: function(e) { signOut();}},
-                        m("icon", {class:"fas fa-sign-out-alt"}), "Deconnexion"),
-                ]),
-            ]),
-            m("h1", {class: 'title'}, 'Mon Espace Personnel'),
-            m("h1", {class: 'title'}, 'Mon Espace Personnel'),
-            m('div',{class: 'navbar-end is-ancestor'},[
-                m("div", {class: 'tile'}, m('div',{class:'tile is-child box'},m(MyPetSignedView))),
-                m("div", {class: 'tile'}, m('div',{class:'tile is-child box'},m(MyPetCreatedView))),
-            ]),
-            m("footer", {class: 'has-text-centered'}, "Site réalisé par Luca GARIC et Michaël LOPES - V1.0"),
-        ])
+		if (localStorage.getItem("verif") != null){
+			return m('div', {class:'container'}, [
+	
+	            m('nav',{class: 'navbar is-fixed-top'},[
+	                m('div',{class: 'navbar-start'},[
+	                    m("h1", {class: 'title'}, 'TinyPet'),
+	                    m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/index.html";}},
+	                        m("icon", {class:"fas fa-chart-line"}), "Top Petition"),
+	                    m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/creerPetition.html";}}, 
+	                        m("icon", {class:"fas fa-pen"}), "Créer petition"),
+	                    m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/espacePerso.html";}}, 
+	                        m("icon", {class:"fas fa-user"}), "Espace perso"),
+	                    m("div", {
+	                   	   "style": "display:none",
+	                   	   "class":"g-signin2",
+	                   	   "data-theme":"dark",
+	                   	   "data-onsuccess": "onSignIn"}),                   
+	                ]),
+	                m('div',{class: 'navbar-end'},[
+	                    m('button', {class:"button is-warning is-rounded", onclick: function(e) { javascript:history.back();}},
+	                        m("icon", {class:"fas fa-undo"}), "Retour"),
+	                    m('button', {class:"button is-danger is-rounded", onclick: function(e) { signOut();}},
+	                        m("icon", {class:"fas fa-sign-out-alt"}), "Deconnexion"),
+	                ]),
+	            ]),
+	            m("h1", {class: 'title'}, 'Mon Espace Personnel'),
+	            m("h1", {class: 'title'}, 'Mon Espace Personnel'),
+	            m('div',{class: 'navbar-end is-ancestor'},[
+	                m("div", {class: 'tile'}, m('div',{class:'tile is-child box'},m(MyPetSignedView))),
+	                m("div", {class: 'tile'}, m('div',{class:'tile is-child box'},m(MyPetCreatedView))),
+	            ]),
+	            m("footer", {class: 'has-text-centered'}, "Site réalisé par Luca GARIC et Michaël LOPES - V1.0"),
+	        ])
+		}else{
+			document.location.href="/index.html";
+		}
 	}
 }
 

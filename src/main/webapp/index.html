@@ -22,7 +22,7 @@
 			  Profile.name=profile.getName();
 			  Profile.email=profile.getEmail();
 			  Profile.ID=googleUser.getAuthResponse().id_token;
-			  sessionStorage.setItem('Profile',JSON.stringify(Profile));
+			  localStorage.setItem('owner', "1");
 			  console.log(sessionStorage);
 			  //window.location.href = "/topPet.html";
 	      }
@@ -32,15 +32,31 @@
 	            auth2.signOut().then(function () {
 	              console.log('User signed out.');
 	              //m.route.set("/login")
-	              sessionStorage.clear();      
+	              localStorage.clear();      
 	              console.log(sessionStorage);
 	            });
 	        }
-	      function checkRedirect(){
+	      function checkRedirectEP(){
 	    	  if(gapi.auth2.getAuthInstance().isSignedIn.get()){
 	    		  document.location.href="/espacePerso.html";
 	    	  }else{
-	    		  window.alert("lol no");
+	    		  window.alert("Vous devez vous connecter pour voir votre espace perso");
+	    	  }
+	      }
+	      
+	      function checkRedirectD(item){
+	    	  if(gapi.auth2.getAuthInstance().isSignedIn.get()){
+	    		  document.location.href="/detailsPet.html?"+item.key.name;
+	    	  }else{
+	    		  window.alert("Veuillez vous connecter pour profiter au mieux de notre site");
+	    	  }
+	      }
+	      
+	      function checkRedirectCP(){
+	    	  if(gapi.auth2.getAuthInstance().isSignedIn.get()){
+	    		  document.location.href="/creerPetition.html";
+	    	  }else{
+	    		  window.alert("Veuillez vous connecter pour créer une pétition");
 	    	  }
 	      }
 	      var Profile={
@@ -98,14 +114,14 @@
 	    								m('td', m('label', item.properties.dateC)),
 	    								m('td', m('label', troncstring)),
 	    								m('td', m('label', item.properties.nbSignature)),
-	    								m('button', {class:"button is-primary is-rounded is-small", onclick: function(e) { document.location.href="/detailsPet.html?"+item.key.name;}}, "Voir plus"),
+	    								m('button', {class:"button is-primary is-rounded is-small", onclick: function(e) { checkRedirectD(item);}}, "Voir plus"),
 	    							])
 	    						})
 	    					])
 	    				])
 	    			}
 	    		}
-				
+
 	      var Hello = {
 	    			view: function() {
 	    				return m('div', {class:'container'}, [   	    					
@@ -114,9 +130,9 @@
 	    							m("site", {class: 'title'}, 'TinyPet'),
 	    							m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/index.html";}},
 	    								m("icon", {class:"fas fa-chart-line"}), "Top Petition"),
-	    							m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/creerPetition.html";}}, 
+	    							m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { checkRedirectCP();}}, 
 	    								m("icon", {class:"fas fa-pen"}), "Créer petition"),
-	    							m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/espacePerso.html";}}, 
+	    							m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { checkRedirectEP();}}, 
 	    								m("icon", {class:"fas fa-user"}), "Espace perso"),	    								
 	    						]),
 	    						m('div',{class: 'navbar-end'},[
