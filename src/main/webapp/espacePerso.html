@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta name="google-signin-scope" content="profile email">
+<meta name="google-signin-client_id" content="46330245209-9jejvn58229dabq46josvavn3crj9ogl.apps.googleusercontent.com">
+<script src="https://apis.google.com/js/platform.js"async defer></script>
 <meta charset="UTF-8">
 <title>Espace personnel</title>
-<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
@@ -14,6 +16,7 @@
 <body>
 
 <script>
+
 var MyPetSigned = {
 	list: [],
 	loadList: function() {
@@ -66,6 +69,15 @@ var MyPetSignedView = {
 	}
 }
 
+function signOut() {
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+      console.log('User signed out.');
+      localStorage.clear();
+      window.location.href="index.html";
+    });
+}
+
 var MyPetCreated = {
 	list: [],
 	loadList: function() {
@@ -75,7 +87,7 @@ var MyPetCreated = {
 	})
 	.then(function(result) {
 		MyPetCreated.list = result.items
-		console.log("got:",result.items)
+		console.log("thatskindoftrue:",sessionStorage)
 		// m.redraw(true) 
 		})
 	 }
@@ -111,6 +123,51 @@ var MyPetCreatedView = {
 	}
 }
 
+
+var Hello = {
+	view: function(){
+		if (localStorage.getItem("verif") != null){
+			return m('div', {class:'container'}, [
+	
+	            m('nav',{class: 'navbar is-fixed-top'},[
+	                m('div',{class: 'navbar-start'},[
+	                    m("h1", {class: 'title'}, 'TinyPet'),
+	                    m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/index.html";}},
+	                        m("icon", {class:"fas fa-chart-line"}), "Top Petition"),
+	                    m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/creerPetition.html";}}, 
+	                        m("icon", {class:"fas fa-pen"}), "Créer petition"),
+	                    m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/espacePerso.html";}}, 
+	                        m("icon", {class:"fas fa-user"}), "Espace perso"),
+	                    m("div", {
+	                   	   "style": "display:none",
+	                   	   "class":"g-signin2",
+	                   	   "data-theme":"dark",
+	                   	   "data-onsuccess": "onSignIn"}),                   
+	                ]),
+	                m('div',{class: 'navbar-end'},[
+	                    m('button', {class:"button is-warning is-rounded", onclick: function(e) { javascript:history.back();}},
+	                        m("icon", {class:"fas fa-undo"}), "Retour"),
+	                    m('button', {class:"button is-danger is-rounded", onclick: function(e) { signOut();}},
+	                        m("icon", {class:"fas fa-sign-out-alt"}), "Deconnexion"),
+	                ]),
+	            ]),
+	            m("h1", {class: 'title'}, 'Mon Espace Personnel'),
+	            m("h1", {class: 'title'}, 'Mon Espace Personnel'),
+	            m('div',{class: 'navbar-end is-ancestor'},[
+	                m("div", {class: 'tile'}, m('div',{class:'tile is-child box'},m(MyPetSignedView))),
+	                m("div", {class: 'tile'}, m('div',{class:'tile is-child box'},m(MyPetCreatedView))),
+	            ]),
+	            m("footer", {class: 'has-text-centered'}, "Site réalisé par Luca GARIC et Michaël LOPES - V1.0"),
+	        ])
+		}else{
+			document.location.href="/index.html";
+		}
+	}
+}
+
+
+
+/*
 var Hello = {
 	view: function() {
 		return m('div', {class:'container'}, [
@@ -142,7 +199,7 @@ var Hello = {
 		])
 	}
 }
-
+*/
 m.mount(document.body, Hello)
 </script>
 </body>

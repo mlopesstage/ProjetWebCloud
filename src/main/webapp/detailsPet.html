@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Top petitions</title>
+<meta name="google-signin-scope" content="profile email">
+<meta name="google-signin-client_id" content="46330245209-9jejvn58229dabq46josvavn3crj9ogl.apps.googleusercontent.com">
+<script src="https://apis.google.com/js/platform.js"async defer></script>
 <meta charset="utf-8">
+<title>Top petitions</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
@@ -20,6 +22,11 @@ var idobj = currenturl.split('?')[1]
 var idurl = "_ah/api/myApi/v1/detailpet/"+idobj
 var idsignerpeturl = "_ah/api/myApi/v1/signerpet/"+idobj
 var idfermerpeturl = "_ah/api/myApi/v1/fermerpet/"+idobj
+var Profile={
+		  name:"",
+		  email:"",
+		  ID:"",
+}
 
 var DetailsPet = {
 	list: [],   
@@ -103,43 +110,65 @@ var DetailsPetView = {
 						m('th', "Etat"),
 						m('td', m('label', item.properties.etat)),   		    
 					]),
-				
+
 					DetailsPet.list.map(function(item) {
-						if(item.properties.idAuteur == "U1001" && item.properties.etat == "Ouverte") {
+						if(item.properties.idAuteur == "mica-lopes@hotmail.fr" && item.properties.etat == "Ouverte") {
 							return m('button',{
 								class: 'button is-danger is-rounded',
 								onclick: function(e) {FermerPet.loadList()}					        	
 							},"Fermer Petition")
-						} else if (item.properties.idSignataire === undefined && item.properties.etat == "Ouverte") {
-							return m('button',{
-								class: 'button is-primary is-rounded',
-								onclick: function(e) {SignerPet.loadList()}					        	
-							},"Signer Petition")
-						} else if (!(item.properties.idSignataire.includes("U1001")) && item.properties.etat == "Ouverte") {
+						} else if (!(item.properties.idSignataire.includes("mica-lopes@hotmail.fr")) && item.properties.etat == "Ouverte") {
 							return m('button',{
 								class: 'button is-primary is-rounded',
 								onclick: function(e) {SignerPet.loadList()}					        	
 							},"Signer Petition")
 						} else {
 							return m('button',{
+	
 								class: 'button is-danger is-rounded',
 								disabled:"disabled"
 							},"Impossible")
 						}
-					})
+					})								
 				])
 			})
 		])
 	}
 }
 
+function onSignIn(googleUser) {
+    // Useful data for your client-side scripts:
+      var profile = googleUser.getBasicProfile();
+      Profile.email=profile.getEmail();
+      console.log("user signed in");
+      DetailsPetView;
+      localStorage.setItem('verif', "1");
+  }
+
+function signOut() {
+    var auth2 = gapi.auth2.getAuthInstance();
+    console.log(Profile.email);
+    auth2.signOut().then(function () {
+      Profile.email="";
+      console.log('User signed out.');
+      localStorage.clear();
+      window.location.href="index.html";
+    });
+}
+
 var Hello = {
 	view: function() {
+		if (localStorage.getItem("verif") != null){
 		return m('div', {class:'container'}, [
+				m("div", {	
+					   "style": "display:none",
+			      	   "class":"g-signin2",
+			      	   "data-theme":"dark",
+			      	   "data-onsuccess": "onSignIn"}),  	   
 			m('nav',{class: 'navbar is-fixed-top'},[
 				m('div',{class: 'navbar-start'},[
 					m("site", {class: 'title'}, 'TinyPet'),
-					m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/topPet.html";}},
+					m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/index.html";}},
 						m("icon", {class:"fas fa-chart-line"}), "Top Petition"),
 					m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/creerPetition.html";}}, 
 						m("icon", {class:"fas fa-pen"}), "Créer petition"),
@@ -155,8 +184,11 @@ var Hello = {
 			]),
 			m("h1", {class: 'title is-ancestor'}, 'Détails de la pétition'),
 			m("div", {class: 'tile'}, m('div',{class:'tile is-child box'},m(DetailsPetView))),
-			m("footer", {class: 'has-text-centered'}, "Site réalisé par Luca GARIC et Michaël LOPES - V1.0"),
+			m("footer", {class: 'has-text-centered'}, "Site réalisé par Luca GARIC et Michaël LOPES - V1.0")
 		])
+		}else{
+			document.location.href="/index.html";
+		}
 	}
 }
 
