@@ -1,40 +1,29 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta name="google-signin-scope" content="profile email">
-<meta name="google-signin-client_id" content="232742472331-2f32mq8k3pbenacl44usnrf37362vo4t.apps.googleusercontent.com">
-<script src="https://apis.google.com/js/platform.js"async defer></script>
-<meta charset="utf-8">
-<title>Top petitions</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
-<script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
-<script src="https://unpkg.com/mithril/mithril.js"></script>
-
+	<meta name="google-signin-scope" content="profile email">
+	<meta name="google-signin-client_id" content="232742472331-2f32mq8k3pbenacl44usnrf37362vo4t.apps.googleusercontent.com">
+	<script src="https://apis.google.com/js/platform.js"async defer></script>
+	<meta charset="utf-8">
+	<title>Top petitions</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+	<script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+	<script src="https://unpkg.com/mithril/mithril.js"></script>
 </head>
+
 <body>
-
 <script>
-
 
 var currenturl = window.location.search;
 const urlParams = new URLSearchParams(currenturl);
-const mail = urlParams.get('email');
-const name = urlParams.get('name');
+const mail = localStorage.getItem("Email");
+const name = localStorage.getItem("Name");
 const id = urlParams.get('idpet');
-
-var Profile={
-		  name:"",
-		  email:"",
-		  ID:"",
-}
-
-var profile;
 
 var DetailsPet = {
 	list: [],   
-	loadList: function(idobj) {
+	loadList: function() {
 		return m.request({
 			method: "GET", 
 			url: "_ah/api/myApi/v1/detailpet/"+id
@@ -44,52 +33,26 @@ var DetailsPet = {
 			console.log("got:",result.items)
 			// m.redraw(true) 
 		})
-	}
-}
-
-function CheckIfLoggedInS() {
-	if(gapi.auth2.getAuthInstance().isSignedIn.get()){
-		  SignerPet.loadList();
-	  }else{
-		  window.alert("Veuillez vous connecter pour signer une pétition");
-	  }
-}
-
-function CheckIfLoggedInF() {
-	if(gapi.auth2.getAuthInstance().isSignedIn.get()){
-		  FermerPet.loadList();
-	  }else{
-		  window.alert("Nous devons vérifiez que ce soit bien vous l'auteur de cette pétition, veuillez vous connecter");
-	  }
-}
-
-var SignerPet = {
-	list: [],
-	oninit: DetailsPet.loadList,
-	loadList: function(idobj) {
+	},
+	sign: function(mail,id) {
 		return m.request({
 			method: "GET", 
 			url: "_ah/api/myApi/v1/signerpet/"+mail+"/"+id
 		})
 		.then(function(result) {
-			DetailsPet.list = result.items
+			//DetailsPet.list = result.items
 			console.log("got:",result.items)
 			DetailsPet.loadList()
 			// m.redraw(true) 
 		})
-	}
-}
-
-var FermerPet = {
-	list: [],
-	oninit: DetailsPet.list,
-	loadList: function(idobj) {
+	},
+	close: function(id) {
 		return m.request({
 			method: "GET", 
 			url: "_ah/api/myApi/v1/fermerpet/"+id
         })
         .then(function(result) {
-            DetailsPet.list = result.items
+            //DetailsPet.list = result.items
         	console.log("got:",result.items)
         	DetailsPet.loadList()
         	// m.redraw(true) 
@@ -105,107 +68,134 @@ var DetailsPetView = {
 			DetailsPet.list.map(function(item) {
 				return m('table', {class:'table is-striped'},[
 					m('tr', [
-						m('th', "Titre"), 
-						m('td', m('label', item.properties.titre)),	    
+						m('th', "Titre"),
+						m('td', m('label', item.properties.titre)),
 					]),
 					m('tr', [
 						m('th', "Date de création"),
-						m('td', m('label', item.properties.dateC)),	    		    
+						m('td', m('label', item.properties.dateC)),
 					]),
 					m('tr', [
 						m('th', "Auteur"),
-						m('td', m('label', item.properties.idAuteur)),    		    
+						m('td', m('label', item.properties.idAuteur)),
 					]),
 					m('tr', [
 						m('th', "Probleme"),
-						m('td', m('label', item.properties.probleme)),    		    
+						m('td', m('label', item.properties.probleme)),
 					]),
 					m('tr', [
 						m('th', "Signatures"),
-						m('td', m('label', item.properties.nbSignature)),	    		    
+						m('td', m('label', item.properties.nbSignature)),
 					]),
 					m('tr', [
 						m('th', "Tags"),
-						m('td', m('label', item.properties.tags)),	    		    
+						m('td', m('label', item.properties.tags)),
 					]),
 					m('tr', [
 						m('th', "Etat"),
-						m('td', m('label', item.properties.etat)),   		    
+						m('td', m('label', item.properties.etat)),
 					]),
-					DetailsPet.list.map(function(item) {
-						if(item.properties.idAuteur == mail && item.properties.etat == "Ouverte") {
-							return m('button',{
-								class: 'button is-danger is-rounded',
-								onclick: function(e) {CheckIfLoggedInF();}					        	
-							},"Fermer Petition")
-						} else if (!(item.properties.idSignataire.includes(mail)) && item.properties.etat == "Ouverte") {
-							return m('button',{
-								class: 'button is-primary is-rounded',
-								onclick: function(e) {CheckIfLoggedInS();}					        	
-							},"Signer Petition")
-						} else {
-							return m('button',{
-								class: 'button is-danger is-rounded',
-								disabled:"disabled"
-							},"Impossible")
-						}
-					})
+					m('div', checkOut(item)),
 				])
 			})
 		])
 	}
 }
 
+function checkOut(item){
+	if(item.properties.idAuteur == mail && item.properties.etat == "Ouverte") {
+		return m('button',{
+			class: 'button is-danger is-rounded',
+			onclick: function(e) {DetailsPet.close(id);}					        	
+		},"Fermer Petition")
+	} else if (!(item.properties.idSignataire.includes(mail)) && item.properties.etat == "Ouverte" && mail != null)  {
+		return m('button',{
+			class: 'button is-primary is-rounded',
+			onclick: function(e) {DetailsPet.sign(mail,id);}					        	
+		},"Signer Petition")
+	} else {
+		return 	m('button',{
+			class: 'button is-danger is-rounded',
+			disabled:"disabled"
+		},"Impossible")
+	}	
+}
+
+function checkRedirectEP(){
+	if(gapi.auth2.getAuthInstance().isSignedIn.get()){	    		  
+		document.location.href="/espacePerso.html";
+	} else {
+		window.alert("Vous devez vous connecter pour voir votre espace perso");
+	}
+}
+
+function checkRedirectCP(){
+	if(gapi.auth2.getAuthInstance().isSignedIn.get()){
+		document.location.href="/creerPetition.html";
+	} else {
+		window.alert("Vous devez vous connecter pour créer une pétition");
+	}
+}
+
 function onSignIn(googleUser) {
-    // Useful data for your client-side scripts:
-      profile = googleUser.getBasicProfile();
-      Profile.email=profile.getEmail();
-      console.log("user signed in");
-      DetailsPetView;
-  }
+	// Useful data for your client-side scripts:
+	var profile = googleUser.getBasicProfile(); 
+	localStorage.setItem("Email", profile.getEmail());
+	localStorage.setItem("Name", profile.getName());
+}
 
 function signOut() {
-    var auth2 = gapi.auth2.getAuthInstance();
-    console.log(Profile.email);
-    auth2.signOut().then(function () {
-      Profile.email="";
-      console.log('User signed out.');
-      document.location.href="/index.html";
+	var auth2 = gapi.auth2.getAuthInstance();
+	auth2.signOut().then(function () {
+		localStorage.clear();
+		console.log('User signed out.');
+		document.location.href="/index.html";
     });
+}
+
+
+function verifNavBarEnd() {
+	if(localStorage.getItem("Email") == null) {
+		return m('div',{class: 'navbar-end'},[
+			m("div", {
+				"class":"g-signin2",
+				"data-theme":"dark",
+				"data-onsuccess": "onSignIn"}),
+		])
+	} else {
+		//location.reload();
+		return m('div',{class: 'navbar-end'},[
+			m("div", {
+				"style": "display:none",
+				"class":"g-signin2",
+				"data-theme":"dark",
+				"data-onsuccess": "onSignIn"}),
+			m('h1', {class: 'title is-ancestor'}, name),
+			m('button', {class:"button is-danger is-rounded", onclick: function(e) { signOut();}},
+			m("icon", {class:"fas fa-sign-out-alt"}), "Deconnexion"),
+		])
+	}
 }
 
 var Hello = {
 	view: function() {
-		if(mail !== "" && currenturl.includes("?")){
-			return m('div', {class:'container'}, [
-				m("div", {
-					   "style": "display:none",
-			      	   "class":"g-signin2",
-			      	   "data-theme":"dark",
-			      	   "data-onsuccess": "onSignIn"}),
-				m('nav',{class: 'navbar is-fixed-top'},[
-					m('div',{class: 'navbar-start'},[
-						m("site", {class: 'title'}, 'TinyPet'),
-						m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/index.html";}},
-							m("icon", {class:"fas fa-chart-line"}), "Top Petition"),
-						m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/creerPetition.html?name="+name+"&email="+mail;}}, 
-							m("icon", {class:"fas fa-pen"}), "Créer petition"),
-						m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/espacePerso.html?name="+name+"&email="+mail;}}, 
-							m("icon", {class:"fas fa-user"}), "Espace perso"),
-					]),
-					m('div',{class: 'navbar-end'},[
-						m('h1', {class: 'title is-ancestor'}, name),
-						m('button', {class:"button is-danger is-rounded", onclick: function(e) { signOut();}},
-							m("icon", {class:"fas fa-sign-out-alt"}), "Deconnexion"),
-					]),
+		return m('div', {class:'container'}, [				 	   
+			m('nav',{class: 'navbar is-fixed-top'},[
+				m('div',{class: 'navbar-start'},[
+					m('img', {src:"logo.png"}),
+					m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/index.html";}},
+						m("icon", {class:"fas fa-chart-line"}), "Top Petition"),
+					m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { checkRedirectCP();}}, 
+						m("icon", {class:"fas fa-pen"}), "Créer petition"),
+					m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { checkRedirectEP();}}, 
+						m("icon", {class:"fas fa-user"}), "Espace perso"),
 				]),
-				m("h1", {class: 'title is-ancestor'}, 'Détails de la pétition'),
-				m("div", {class: 'tile'}, m('div',{class:'tile is-child box'},m(DetailsPetView))),
-				m("footer", {class: 'has-text-centered'}, "Site réalisé par Luca GARIC et Michaël LOPES - V1.0")
-			])
-		}else{
-			document.location.href="/index.html";
-		}
+				m('div', verifNavBarEnd()),
+			]),
+			m("h1", {class: 'title is-ancestor'}, 'Détails de la pétition'),
+			m("div", {class: 'tile'}, m('div',{class:'tile is-child box'},m(DetailsPetView))),
+			m("footer", {class: 'has-text-centered'}, "Site réalisé par Luca GARIC et Michaël LOPES - V1.0")
+		])
 	}	
 }
 
