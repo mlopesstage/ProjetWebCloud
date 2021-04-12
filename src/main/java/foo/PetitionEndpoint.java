@@ -10,8 +10,10 @@ import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
 import com.google.api.server.spi.config.Named;
+import com.google.api.server.spi.config.Nullable;
 import com.google.api.server.spi.config.ApiMethod.HttpMethod;
-
+import com.google.api.server.spi.response.CollectionResponse;
+import com.google.appengine.api.datastore.Cursor;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -21,6 +23,7 @@ import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.QueryResultList;
 import com.google.appengine.api.datastore.Transaction;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
@@ -43,30 +46,56 @@ import com.google.appengine.api.datastore.Query.SortDirection;
 public class PetitionEndpoint {
 
 	@ApiMethod(name = "signedpet", httpMethod = HttpMethod.GET)
-	public List<Entity> signedpet(@Named("mail") String mail) {
+	public CollectionResponse<Entity> signedpet(@Named("mail") String mail, @Nullable @Named("next") String cursorString) {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		Query q = new Query("Petition").setFilter(new FilterPredicate("idSignataire", FilterOperator.EQUAL, mail));
 		PreparedQuery pq = datastore.prepare(q);
-		List<Entity> result = pq.asList(FetchOptions.Builder.withDefaults());
-		return result;
+		
+		FetchOptions fetchOptions = FetchOptions.Builder.withLimit(10);
+
+		if (cursorString != null) {
+			fetchOptions.startCursor(Cursor.fromWebSafeString(cursorString));
+		}
+
+		QueryResultList<Entity> results = pq.asQueryResultList(fetchOptions);
+		cursorString = results.getCursor().toWebSafeString();
+
+		return CollectionResponse.<Entity>builder().setItems(results).setNextPageToken(cursorString).build();
 	}
 	
 	@ApiMethod(name = "mycreatedpet", httpMethod = HttpMethod.GET)
-	public List<Entity> mycreatedpet(@Named("mail") String mail) {
+	public CollectionResponse<Entity> mycreatedpet(@Named("mail") String mail, @Nullable @Named("next") String cursorString) {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		Query q = new Query("Petition").setFilter(new FilterPredicate("idAuteur", FilterOperator.EQUAL, mail));
 		PreparedQuery pq = datastore.prepare(q);
-		List<Entity> result = pq.asList(FetchOptions.Builder.withDefaults());
-		return result;
+		
+		FetchOptions fetchOptions = FetchOptions.Builder.withLimit(10);
+
+		if (cursorString != null) {
+			fetchOptions.startCursor(Cursor.fromWebSafeString(cursorString));
+		}
+
+		QueryResultList<Entity> results = pq.asQueryResultList(fetchOptions);
+		cursorString = results.getCursor().toWebSafeString();
+
+		return CollectionResponse.<Entity>builder().setItems(results).setNextPageToken(cursorString).build();
 	}
 	
 	@ApiMethod(name = "toppetition", httpMethod = HttpMethod.GET)
-	public List<Entity> toppetition() {
+	public CollectionResponse<Entity> toppetition(@Nullable @Named("next") String cursorString) {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		Query q = new Query("Petition").addSort("nbSignature", SortDirection.DESCENDING);
 		PreparedQuery pq = datastore.prepare(q);
-		List<Entity> result = pq.asList(FetchOptions.Builder.withLimit(100));
-		return result;
+		FetchOptions fetchOptions = FetchOptions.Builder.withLimit(10);
+
+		if (cursorString != null) {
+			fetchOptions.startCursor(Cursor.fromWebSafeString(cursorString));
+		}
+
+		QueryResultList<Entity> results = pq.asQueryResultList(fetchOptions);
+		cursorString = results.getCursor().toWebSafeString();
+
+		return CollectionResponse.<Entity>builder().setItems(results).setNextPageToken(cursorString).build();
 	}
 	
 	@ApiMethod(name = "detailpet", httpMethod = HttpMethod.GET)

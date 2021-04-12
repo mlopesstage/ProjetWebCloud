@@ -17,11 +17,8 @@
 
 <script>
 
-var currenturl = window.location.search;
-const urlParams = new URLSearchParams(currenturl);
-const mail = urlParams.get('email');
-const name = urlParams.get('name');
-var profile;
+const mail = localStorage.getItem("Email");
+const name = localStorage.getItem("Name");
 
 var CreatePetView = {
 	petName:"",
@@ -30,8 +27,6 @@ var CreatePetView = {
 		return m("form", {
 		      onsubmit: function(e) {
 			        e.preventDefault()
-					if (petName="") {window.alert("Merci de saisir un nom de pétition !");} 
-					if (petProbleme="") {window.alert("Merci de saisir une description du problème !");}
 					CreatePet.postPet()
 			      }},
 			  [
@@ -58,37 +53,26 @@ var CreatePetView = {
 	          m('div',{class:'control'},
 	        		m("button[type=reset]", {class:'button is-warning'},
 		    		  	m("icon", {class:"fas fa-eraser"}), "Effacer"),
-	    		  	m("button[type=submit]", {class:'button is-success', onclick: function(e) { CheckIfLoggedIn();}},
+	    		  	m("button[type=submit]", {class:'button is-success'},
 	  		    		m("icon", {class:"fas fa-check"}), "Envoyer")
 	          ),
 		    ])
 	}
 }
 
-function CheckIfLoggedIn() {
-	if(!(gapi.auth2.getAuthInstance().isSignedIn.get())){		 
-		  window.alert("Veuillez vous connecter pour créer une pétition");
-	  }
-}
-
-function onSignIn(googleUser) {
-    // Useful data for your client-side scripts:
-    profile = googleUser.getBasicProfile();
-	  //window.location.href = "/topPet.html";
-  }
 function signOut() {
     var auth2 = gapi.auth2.getAuthInstance();
     auth2.signOut().then(function () {
       console.log('User signed out.');
-      window.location.href="index.html";
+      localStorage.clear();
+      window.location.href="index.html"; 
     });
 }
 
 
 var CreatePet = {
-	postPet: function() {
-	if(gapi.auth2.getAuthInstance().isSignedIn.get()){	
-		var data={'owner': profile.getEmail(),
+	postPet: function() {	
+		var data={'owner': mail,
 				'petName':CreatePetView.petName,
 				'petProbleme':CreatePetView.petProbleme}
     	console.log("post:"+data)
@@ -99,30 +83,28 @@ var CreatePet = {
        	})
 	    	.then(function(result) {
    	 			console.log("got:",result)
-   	 			document.location.href="/espacePerso.html?name="+name+"&email="+mail
+   	 			document.location.href="/espacePerso.html"
    	 			//CreatePet.loadList()
        	 	})
-     	}
-	}
+     	}	
 }
 
 var Hello = {
 	view: function() {
-		if(currenturl.includes("?")){
+		if(localStorage.getItem("Email") != null){
 			return m('div', {class:'container'}, [
 				m('nav',{class: 'navbar is-fixed-top'},[
 					m('div',{class: 'navbar-start'},[
-						m("site", {class: 'title'}, 'TinyPet'),
+						m('img', {src:"logo.png"}),
 						m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/index.html";}},
 							m("icon", {class:"fas fa-chart-line"}), "Top Petition"),
-						m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/creerPetition.html?name="+name+"&email="+mail;}}, 
+						m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/creerPetition.html";}}, 
 							m("icon", {class:"fas fa-pen"}), "Créer petition"),
-						m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/espacePerso.html?name="+name+"&email="+mail;}}, 
+						m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/espacePerso.html";}}, 
 							m("icon", {class:"fas fa-user"}), "Espace perso"),
 					]),
 					m('div',{class: 'navbar-end'},[
-						m('button', {class:"button is-warning is-rounded", onclick: function(e) { javascript:history.back();}},
-							m("icon", {class:"fas fa-undo"}), "Retour"),
+						m('h1', {class: 'title is-ancestor'}, name),
 						m("div", {
 							   "style": "display:none",
 		                   	   "class":"g-signin2",

@@ -20,21 +20,13 @@
 
 var currenturl = window.location.search;
 const urlParams = new URLSearchParams(currenturl);
-const mail = urlParams.get('email');
-const name = urlParams.get('name');
+const mail = localStorage.getItem("Email");
+const name = localStorage.getItem("Name");
 const id = urlParams.get('idpet');
-
-var Profile={
-		  name:"",
-		  email:"",
-		  ID:"",
-}
-
-var profile;
 
 var DetailsPet = {
 	list: [],   
-	loadList: function(idobj) {
+	loadList: function() {
 		return m.request({
 			method: "GET", 
 			url: "_ah/api/myApi/v1/detailpet/"+id
@@ -44,50 +36,26 @@ var DetailsPet = {
 			console.log("got:",result.items)
 			// m.redraw(true) 
 		})
-	}
-}
-
-function CheckIfLoggedInS() {
-	if(gapi.auth2.getAuthInstance().isSignedIn.get()){
-		  SignerPet.loadList();
-	  }else{
-		  window.alert("Veuillez vous connecter pour signer une pétition");
-	  }
-}
-
-function CheckIfLoggedInF() {
-	if(gapi.auth2.getAuthInstance().isSignedIn.get()){
-		  FermerPet.loadList();
-	  }else{
-		  window.alert("Nous devons vérifiez que ce soit bien vous l'auteur de cette pétition, veuillez vous connecter");
-	  }
-}
-
-var SignerPet = {
-	list: [],   
-	loadList: function(idobj) {
+	},
+	sign: function(mail,id) {
 		return m.request({
 			method: "GET", 
 			url: "_ah/api/myApi/v1/signerpet/"+mail+"/"+id
 		})
 		.then(function(result) {
-			DetailsPet.list = result.items
+			//DetailsPet.list = result.items
 			console.log("got:",result.items)
 			DetailsPet.loadList()
 			// m.redraw(true) 
 		})
-	}
-}
-
-var FermerPet = {
-	list: [],   
-	loadList: function(idobj) {
+	},
+	close: function(id) {
 		return m.request({
 			method: "GET", 
 			url: "_ah/api/myApi/v1/fermerpet/"+id
         })
         .then(function(result) {
-            DetailsPet.list = result.items
+            //DetailsPet.list = result.items
         	console.log("got:",result.items)
         	DetailsPet.loadList()
         	// m.redraw(true) 
@@ -130,24 +98,8 @@ var DetailsPetView = {
 							m('th', "Etat"),
 							m('td', m('label', item.properties.etat)),   		    
 						]),
-						DetailsPet.list.map(function(item) {
-						if(item.properties.idAuteur == mail && item.properties.etat == "Ouverte") {
-							return m('button',{
-								class: 'button is-danger is-rounded',
-								onclick: function(e) {CheckIfLoggedInF();}					        	
-							},"Fermer Petition")
-						} else if (!(item.properties.idSignataire.includes(mail)) && item.properties.etat == "Ouverte") {
-							return m('button',{
-								class: 'button is-primary is-rounded',
-								onclick: function(e) {CheckIfLoggedInS();}					        	
-							},"Signer Petition")
-						} else {
-							return 	m('button',{
-								class: 'button is-danger is-rounded',
-								disabled:"disabled"
-							},"Impossible")
-						}
-					})								
+						m('div', checkOut(item)),				
+													
 				])
 			})
 					
@@ -155,21 +107,40 @@ var DetailsPetView = {
 	}
 }
 
+function checkOut(item){
+	if(item.properties.idAuteur == mail && item.properties.etat == "Ouverte") {
+		return m('button',{
+			class: 'button is-danger is-rounded',
+			onclick: function(e) {DetailsPet.close(id);}					        	
+		},"Fermer Petition")
+	} else if (!(item.properties.idSignataire.includes(mail)) && item.properties.etat == "Ouverte" && mail != null)  {
+		return m('button',{
+			class: 'button is-primary is-rounded',
+			onclick: function(e) {DetailsPet.sign(mail,id);}					        	
+		},"Signer Petition")
+	} else {
+		return 	m('button',{
+			class: 'button is-danger is-rounded',
+			disabled:"disabled"
+		},"Impossible")
+	}	
+}
+
+
 function onSignIn(googleUser) {
     // Useful data for your client-side scripts:
-      profile = googleUser.getBasicProfile();
-      Profile.email=profile.getEmail();
-      console.log("user signed in");
-      DetailsPetView;
+   	var profile = googleUser.getBasicProfile(); 
+	  localStorage.setItem("Email", profile.getEmail());
+	  localStorage.setItem("Name", profile.getName());
   }
+  	   
 
 function signOut() {
-    var auth2 = gapi.auth2.getAuthInstance();
-    console.log(Profile.email);
-    auth2.signOut().then(function () {
-      Profile.email="";
-      console.log('User signed out.');
-      document.location.href="/index.html";
+	var auth2 = gapi.auth2.getAuthInstance();
+	auth2.signOut().then(function () {
+		localStorage.clear();
+		console.log('User signed out.');
+		document.location.href="/index.html";
     });
 }
 
@@ -177,37 +148,32 @@ function signOut() {
 
 var Hello = {
 	view: function() {
-		if(mail !== "" && currenturl.includes("?")){
-			return m('div', {class:'container'}, [				 	   
-				m('nav',{class: 'navbar is-fixed-top'},[
-					m('div',{class: 'navbar-start'},[
-						m("site", {class: 'title'}, 'TinyPet'),
-						m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/index.html";}},
-							m("icon", {class:"fas fa-chart-line"}), "Top Petition"),
-						m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/creerPetition.html?name="+name+"&email="+mail;}}, 
-							m("icon", {class:"fas fa-pen"}), "Créer petition"),
-						m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/espacePerso.html?name="+name+"&email="+mail;}}, 
-							m("icon", {class:"fas fa-user"}), "Espace perso"),
-					]),
-					m('div',{class: 'navbar-end'},[
-						m('button', {class:"button is-warning is-rounded", onclick: function(e) { javascript:history.back();}},
-							m("icon", {class:"fas fa-undo"}), "Retour"),
-							m("div", {
-								   "style": "display:none",
-						      	   "class":"g-signin2",
-						      	   "data-theme":"dark",
-						      	   "data-onsuccess": "onSignIn"}), 	
-						m('button', {class:"button is-danger is-rounded", onclick: function(e) { signOut();}},
-							m("icon", {class:"fas fa-sign-out-alt"}), "Deconnexion"),
-					]),
+		return m('div', {class:'container'}, [				 	   
+			m('nav',{class: 'navbar is-fixed-top'},[
+				m('div',{class: 'navbar-start'},[
+					m('img', {src:"logo.png"}),
+					m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/index.html";}},
+						m("icon", {class:"fas fa-chart-line"}), "Top Petition"),
+					m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/creerPetition.html?name="+name+"&email="+mail;}}, 
+						m("icon", {class:"fas fa-pen"}), "Créer petition"),
+					m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/espacePerso.html?name="+name+"&email="+mail;}}, 
+						m("icon", {class:"fas fa-user"}), "Espace perso"),
 				]),
-				m("h1", {class: 'title is-ancestor'}, 'Détails de la pétition'),
-				m("div", {class: 'tile'}, m('div',{class:'tile is-child box'},m(DetailsPetView))),
-				m("footer", {class: 'has-text-centered'}, "Site réalisé par Luca GARIC et Michaël LOPES - V1.0")
-			])
-		}else{
-			document.location.href="/index.html";
-		}
+				m('div',{class: 'navbar-end'},[		
+						m("div", {
+							   "style": "display:none",
+					      	   "class":"g-signin2",
+					      	   "data-theme":"dark",
+					      	   "data-onsuccess": "onSignIn"}), 	
+					m('h1', {class: 'title is-ancestor'}, name),      	   
+					m('button', {class:"button is-danger is-rounded", onclick: function(e) { signOut();}},
+						m("icon", {class:"fas fa-sign-out-alt"}), "Deconnexion"),
+				]),
+			]),
+			m("h1", {class: 'title is-ancestor'}, 'Détails de la pétition'),
+			m("div", {class: 'tile'}, m('div',{class:'tile is-child box'},m(DetailsPetView))),
+			m("footer", {class: 'has-text-centered'}, "Site réalisé par Luca GARIC et Michaël LOPES - V1.0")
+		])
 	}	
 }
 
