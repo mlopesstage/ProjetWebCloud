@@ -17,23 +17,27 @@
 
 <script>
 
-var currenturl = document.location.href
-var idobj = currenturl.split('?')[1]
-var idurl = "_ah/api/myApi/v1/detailpet/"+idobj
-var idsignerpeturl = "_ah/api/myApi/v1/signerpet/"+idobj
-var idfermerpeturl = "_ah/api/myApi/v1/fermerpet/"+idobj
+
+var currenturl = window.location.search;
+const urlParams = new URLSearchParams(currenturl);
+const mail = urlParams.get('email');
+const name = urlParams.get('name');
+const id = urlParams.get('idpet');
+
 var Profile={
 		  name:"",
 		  email:"",
 		  ID:"",
 }
 
+var profile;
+
 var DetailsPet = {
 	list: [],   
 	loadList: function(idobj) {
 		return m.request({
 			method: "GET", 
-			url: idurl
+			url: "_ah/api/myApi/v1/detailpet/"+id
 		})
 		.then(function(result) {
 			DetailsPet.list = result.items
@@ -43,12 +47,29 @@ var DetailsPet = {
 	}
 }
 
+function CheckIfLoggedInS() {
+	if(gapi.auth2.getAuthInstance().isSignedIn.get()){
+		  SignerPet.loadList();
+	  }else{
+		  window.alert("Veuillez vous connecter pour signer une pétition");
+	  }
+}
+
+function CheckIfLoggedInF() {
+	if(gapi.auth2.getAuthInstance().isSignedIn.get()){
+		  FermerPet.loadList();
+	  }else{
+		  window.alert("Nous devons vérifiez que ce soit bien vous l'auteur de cette pétition, veuillez vous connecter");
+	  }
+}
+
 var SignerPet = {
-	list: [],   
+	list: [],
+	oninit: DetailsPet.loadList,
 	loadList: function(idobj) {
 		return m.request({
 			method: "GET", 
-			url: idsignerpeturl
+			url: "_ah/api/myApi/v1/signerpet/"+mail+"/"+id
 		})
 		.then(function(result) {
 			DetailsPet.list = result.items
@@ -60,11 +81,12 @@ var SignerPet = {
 }
 
 var FermerPet = {
-	list: [],   
+	list: [],
+	oninit: DetailsPet.list,
 	loadList: function(idobj) {
 		return m.request({
 			method: "GET", 
-			url: idfermerpeturl
+			url: "_ah/api/myApi/v1/fermerpet/"+id
         })
         .then(function(result) {
             DetailsPet.list = result.items
@@ -110,26 +132,24 @@ var DetailsPetView = {
 						m('th', "Etat"),
 						m('td', m('label', item.properties.etat)),   		    
 					]),
-
 					DetailsPet.list.map(function(item) {
-						if(item.properties.idAuteur == "mica-lopes@hotmail.fr" && item.properties.etat == "Ouverte") {
+						if(item.properties.idAuteur == mail && item.properties.etat == "Ouverte") {
 							return m('button',{
 								class: 'button is-danger is-rounded',
-								onclick: function(e) {FermerPet.loadList()}					        	
+								onclick: function(e) {CheckIfLoggedInF();}					        	
 							},"Fermer Petition")
-						} else if (!(item.properties.idSignataire.includes("mica-lopes@hotmail.fr")) && item.properties.etat == "Ouverte") {
+						} else if (!(item.properties.idSignataire.includes(mail)) && item.properties.etat == "Ouverte") {
 							return m('button',{
 								class: 'button is-primary is-rounded',
-								onclick: function(e) {SignerPet.loadList()}					        	
+								onclick: function(e) {CheckIfLoggedInS();}					        	
 							},"Signer Petition")
 						} else {
 							return m('button',{
-	
 								class: 'button is-danger is-rounded',
 								disabled:"disabled"
 							},"Impossible")
 						}
-					})								
+					})
 				])
 			})
 		])
@@ -138,11 +158,10 @@ var DetailsPetView = {
 
 function onSignIn(googleUser) {
     // Useful data for your client-side scripts:
-      var profile = googleUser.getBasicProfile();
+      profile = googleUser.getBasicProfile();
       Profile.email=profile.getEmail();
       console.log("user signed in");
       DetailsPetView;
-      localStorage.setItem('verif', "1");
   }
 
 function signOut() {
@@ -151,45 +170,43 @@ function signOut() {
     auth2.signOut().then(function () {
       Profile.email="";
       console.log('User signed out.');
-      localStorage.clear();
-      window.location.href="index.html";
+      document.location.href="/index.html";
     });
 }
 
 var Hello = {
 	view: function() {
-		if (localStorage.getItem("verif") != null){
-		return m('div', {class:'container'}, [
-				m("div", {	
+		if(mail !== "" && currenturl.includes("?")){
+			return m('div', {class:'container'}, [
+				m("div", {
 					   "style": "display:none",
 			      	   "class":"g-signin2",
 			      	   "data-theme":"dark",
-			      	   "data-onsuccess": "onSignIn"}),  	   
-			m('nav',{class: 'navbar is-fixed-top'},[
-				m('div',{class: 'navbar-start'},[
-					m("site", {class: 'title'}, 'TinyPet'),
-					m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/index.html";}},
-						m("icon", {class:"fas fa-chart-line"}), "Top Petition"),
-					m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/creerPetition.html";}}, 
-						m("icon", {class:"fas fa-pen"}), "Créer petition"),
-					m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/espacePerso.html";}}, 
-						m("icon", {class:"fas fa-user"}), "Espace perso"),
+			      	   "data-onsuccess": "onSignIn"}),
+				m('nav',{class: 'navbar is-fixed-top'},[
+					m('div',{class: 'navbar-start'},[
+						m("site", {class: 'title'}, 'TinyPet'),
+						m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/index.html";}},
+							m("icon", {class:"fas fa-chart-line"}), "Top Petition"),
+						m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/creerPetition.html?name="+name+"&email="+mail;}}, 
+							m("icon", {class:"fas fa-pen"}), "Créer petition"),
+						m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/espacePerso.html?name="+name+"&email="+mail;}}, 
+							m("icon", {class:"fas fa-user"}), "Espace perso"),
+					]),
+					m('div',{class: 'navbar-end'},[
+						m('h1', {class: 'title is-ancestor'}, name),
+						m('button', {class:"button is-danger is-rounded", onclick: function(e) { signOut();}},
+							m("icon", {class:"fas fa-sign-out-alt"}), "Deconnexion"),
+					]),
 				]),
-				m('div',{class: 'navbar-end'},[
-					m('button', {class:"button is-warning is-rounded", onclick: function(e) { javascript:history.back();}},
-						m("icon", {class:"fas fa-undo"}), "Retour"),
-					m('button', {class:"button is-danger is-rounded", onclick: function(e) { signOut();}},
-						m("icon", {class:"fas fa-sign-out-alt"}), "Deconnexion"),
-				]),
-			]),
-			m("h1", {class: 'title is-ancestor'}, 'Détails de la pétition'),
-			m("div", {class: 'tile'}, m('div',{class:'tile is-child box'},m(DetailsPetView))),
-			m("footer", {class: 'has-text-centered'}, "Site réalisé par Luca GARIC et Michaël LOPES - V1.0")
-		])
+				m("h1", {class: 'title is-ancestor'}, 'Détails de la pétition'),
+				m("div", {class: 'tile'}, m('div',{class:'tile is-child box'},m(DetailsPetView))),
+				m("footer", {class: 'has-text-centered'}, "Site réalisé par Luca GARIC et Michaël LOPES - V1.0")
+			])
 		}else{
 			document.location.href="/index.html";
 		}
-	}
+	}	
 }
 
 m.mount(document.body, Hello)

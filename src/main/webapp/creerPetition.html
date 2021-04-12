@@ -17,7 +17,11 @@
 
 <script>
 
-var profile = {}
+var currenturl = window.location.search;
+const urlParams = new URLSearchParams(currenturl);
+const mail = urlParams.get('email');
+const name = urlParams.get('name');
+var profile;
 
 var CreatePetView = {
 	petName:"",
@@ -54,34 +58,36 @@ var CreatePetView = {
 	          m('div',{class:'control'},
 	        		m("button[type=reset]", {class:'button is-warning'},
 		    		  	m("icon", {class:"fas fa-eraser"}), "Effacer"),
-	    		  	m("button[type=submit]", {class:'button is-success'},
+	    		  	m("button[type=submit]", {class:'button is-success', onclick: function(e) { CheckIfLoggedIn();}},
 	  		    		m("icon", {class:"fas fa-check"}), "Envoyer")
 	          ),
 		    ])
 	}
 }
 
+function CheckIfLoggedIn() {
+	if(!(gapi.auth2.getAuthInstance().isSignedIn.get())){		 
+		  window.alert("Veuillez vous connecter pour créer une pétition");
+	  }
+}
+
 function onSignIn(googleUser) {
     // Useful data for your client-side scripts:
-      profile = googleUser.getBasicProfile();
-	  localStorage.setItem('verif', "1");
-	  console.log(sessionStorage);
+    profile = googleUser.getBasicProfile();
 	  //window.location.href = "/topPet.html";
   }
-  
 function signOut() {
     var auth2 = gapi.auth2.getAuthInstance();
     auth2.signOut().then(function () {
       console.log('User signed out.');
-      localStorage.clear();
       window.location.href="index.html";
     });
 }
 
-var emailUser = { }
 
 var CreatePet = {
-		postPet: function() {
+	postPet: function() {
+	if(gapi.auth2.getAuthInstance().isSignedIn.get()){	
 		var data={'owner': profile.getEmail(),
 				'petName':CreatePetView.petName,
 				'petProbleme':CreatePetView.petProbleme}
@@ -93,38 +99,37 @@ var CreatePet = {
        	})
 	    	.then(function(result) {
    	 			console.log("got:",result)
-   	 			document.location.href="/espacePerso.html"
+   	 			document.location.href="/espacePerso.html?name="+name+"&email="+mail
    	 			//CreatePet.loadList()
        	 	})
      	}
+	}
 }
 
 var Hello = {
 	view: function() {
-		if (localStorage.getItem("verif") != null){
+		if(currenturl.includes("?")){
 			return m('div', {class:'container'}, [
+				m("div", {
+					   "style": "display:none",
+                	   "class":"g-signin2",
+                	   "data-theme":"dark",
+                	   "data-onsuccess": "onSignIn"}),
 				m('nav',{class: 'navbar is-fixed-top'},[
 					m('div',{class: 'navbar-start'},[
 						m("site", {class: 'title'}, 'TinyPet'),
 						m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/index.html";}},
 							m("icon", {class:"fas fa-chart-line"}), "Top Petition"),
-						m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/creerPetition.html";}}, 
+						m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/creerPetition.html?name="+name+"&email="+mail;}}, 
 							m("icon", {class:"fas fa-pen"}), "Créer petition"),
-						m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/espacePerso.html";}}, 
+						m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/espacePerso.html?name="+name+"&email="+mail;}}, 
 							m("icon", {class:"fas fa-user"}), "Espace perso"),
 					]),
 					m('div',{class: 'navbar-end'},[
-						m('button', {class:"button is-warning is-rounded", onclick: function(e) { javascript:history.back();}},
-							m("icon", {class:"fas fa-undo"}), "Retour"),
+						m('h1', {class: 'title is-ancestor'}, name),
 						m('button', {class:"button is-danger is-rounded", onclick: function(e) { signOut();}},
-							m("icon", {class:"fas fa-sign-out-alt"}), "Deconnexion"),
-						m("div", {
-		                   	   "style": "display:none",
-		                   	   "class":"g-signin2",
-		                   	   "data-theme":"dark",
-		                   	   "data-onsuccess": "onSignIn"}),   
+							m("icon", {class:"fas fa-sign-out-alt"}), "Deconnexion"),						   
 					]),
-					
 				]),
 				m("h1", {class: 'title is-ancestor'}, 'Création d\'une pétition'),
 				m("h1", {class: 'title is-ancestor'}, 'Création d\'une pétition'),
@@ -132,7 +137,7 @@ var Hello = {
 				m("footer", {class: 'has-text-centered'}, "Site réalisé par Luca GARIC et Michaël LOPES - V1.0"),
 			])
 		}else{
-			document.location.href="/index.html";
+			document.location.href="/index.html";		
 		}
 	}
 }

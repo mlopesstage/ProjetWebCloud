@@ -1,22 +1,17 @@
 package foo;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Random;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
 import com.google.api.server.spi.config.Named;
-import com.google.api.server.spi.auth.common.User;
 import com.google.api.server.spi.config.ApiMethod.HttpMethod;
-import com.google.api.server.spi.response.UnauthorizedException;
+
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -49,18 +44,18 @@ import com.google.appengine.api.datastore.Query.SortDirection;
 public class PetitionEndpoint {
 
 	@ApiMethod(name = "signedpet", httpMethod = HttpMethod.GET)
-	public List<Entity> signedpet() {
+	public List<Entity> signedpet(@Named("mail") String mail) {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-		Query q = new Query("Petition").setFilter(new FilterPredicate("idSignataire", FilterOperator.EQUAL, "mica-lopes@hotmail.fr"));
+		Query q = new Query("Petition").setFilter(new FilterPredicate("idSignataire", FilterOperator.EQUAL, mail));
 		PreparedQuery pq = datastore.prepare(q);
 		List<Entity> result = pq.asList(FetchOptions.Builder.withDefaults());
 		return result;
 	}
 	
 	@ApiMethod(name = "mycreatedpet", httpMethod = HttpMethod.GET)
-	public List<Entity> mycreatedpet() {
+	public List<Entity> mycreatedpet(@Named("mail") String mail) {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-		Query q = new Query("Petition").setFilter(new FilterPredicate("idAuteur", FilterOperator.EQUAL, "mica-lopes@hotmail.fr"));
+		Query q = new Query("Petition").setFilter(new FilterPredicate("idAuteur", FilterOperator.EQUAL, mail));
 		PreparedQuery pq = datastore.prepare(q);
 		List<Entity> result = pq.asList(FetchOptions.Builder.withDefaults());
 		return result;
@@ -87,7 +82,7 @@ public class PetitionEndpoint {
 	}
 	
 	@ApiMethod(name = "signerpet", httpMethod = HttpMethod.GET)
-	public Entity signerpet(@Named("id") String id) {
+	public Entity signerpet(@Named("mail") String mail, @Named("id") String id) {
 		//long idl = Long.parseLong(id);
 		
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -105,7 +100,7 @@ public class PetitionEndpoint {
             p = datastore.get(k);
             for (Entity entity : result) {
                 ArrayList<String> fset = (ArrayList<String>) entity.getProperty("idSignataire");
-                fset.add("mica-lopes@hotmail.fr");
+                fset.add(mail);
                 p.setProperty("idSignataire", fset);
             }
 
@@ -149,24 +144,22 @@ public class PetitionEndpoint {
 	}
 	
 	@ApiMethod(name = "creerpetition", httpMethod = HttpMethod.POST)
-	public Entity creerpetition(User user, CreerPetition1 cp) {
+	public Entity creerpetition(CreerPetition1 cp) {
 
 		Date date = new Date();
 		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-		
-		//Entity p = new Entity("Petition", Long.MAX_VALUE-(new Date()).getTime()+":"+user.getEmail());
-		Entity p = new Entity("Petition", Long.MAX_VALUE-(new Date()).getTime()+":"+"U1001");
+		Entity p = new Entity("Petition", Long.MAX_VALUE-(new Date()).getTime()+":"+cp.owner);
 		p.setProperty("dateC", formatter.format(date));
 		p.setProperty("etat", "Ouverte");
 		HashSet<String> pset = new HashSet<String>();		
-		pset.add(""); //A SUP
+		pset.add("");
 		p.setProperty("idSignataire", pset);
-		p.setProperty("idAuteur","mica-lopes@hotmail.fr");
-		//p.setProperty("idAuteur", user.getEmail());
+		p.setProperty("idAuteur", cp.owner);
 		p.setProperty("nbSignature", 0);
 		p.setProperty("probleme", cp.petProbleme);
-		HashSet<String> ftags = new HashSet<String>();
-		p.setProperty("tags", ftags);
+		HashSet<String> ftags = new HashSet<String>(); //a supp
+		ftags.add(""); //a supp
+		p.setProperty("tags", ftags); //a supp
 		p.setProperty("titre", cp.petName);
 
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();

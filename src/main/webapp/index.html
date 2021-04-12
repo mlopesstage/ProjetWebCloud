@@ -15,64 +15,53 @@
 		<div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
 
 		<script>
-
-		function onSignIn(googleUser) {
+	
+		  var Profile={
+	    		  name:"",
+	    		  email:"",
+	    		  ID:"",
+		  }
+		  
+	      function onSignIn(googleUser) {
 	        // Useful data for your client-side scripts:
 	        var profile = googleUser.getBasicProfile();
 			  Profile.name=profile.getName();
 			  Profile.email=profile.getEmail();
 			  Profile.ID=googleUser.getAuthResponse().id_token;
-			  localStorage.setItem('verif', "1");
-			  console.log(sessionStorage);
 			  //window.location.href = "/topPet.html";
 	      }
-		
+	      	      
 	      function signOut() {
 	            var auth2 = gapi.auth2.getAuthInstance();
 	            auth2.signOut().then(function () {
 	              console.log('User signed out.');
 	              //m.route.set("/login")
-	              localStorage.clear();      
-	              console.log(sessionStorage);
 	            });
 	        }
 	      function checkRedirectEP(){
 	    	  if(gapi.auth2.getAuthInstance().isSignedIn.get()){
-	    		  document.location.href="/espacePerso.html";
+	    		  document.location.href="/espacePerso.html?name="+Profile.name+"&email="+Profile.email;
 	    	  }else{
 	    		  window.alert("Vous devez vous connecter pour voir votre espace perso");
 	    	  }
 	      }
 	      
-	      function checkRedirectD(item){
+	      function checkRedirectCP(){
 	    	  if(gapi.auth2.getAuthInstance().isSignedIn.get()){
-	    		  document.location.href="/detailsPet.html?"+item.key.name;
+	    		  document.location.href="/creerPetition.html?name="+Profile.name+"&email="+Profile.email;
 	    	  }else{
-	    		  window.alert("Veuillez vous connecter pour profiter au mieux de notre site");
+	    		  window.alert("Vous devez vous connecter pour créer une pétition");
 	    	  }
 	      }
 	      
-	      function checkRedirectCP(){
+	      function checkRedirectD(item){
 	    	  if(gapi.auth2.getAuthInstance().isSignedIn.get()){
-	    		  document.location.href="/creerPetition.html";
+	    		  document.location.href="/detailsPet.html?idpet="+item.key.name+"&name="+Profile.name+"&email="+Profile.email;
 	    	  }else{
-	    		  window.alert("Veuillez vous connecter pour créer une pétition");
+	    		  window.alert("Veuillez vous connecter pour profiter au maximum de nos fonctionnalités");
 	    	  }
 	      }
-	      var Profile={
-	    		  name:"",
-	    		  email:"",
-	    		  ID:"",
-	    		  view: function(){
-	    			return m('div', {class:'container'}, [
-	    		  	  m("h1", {class: 'title'}, "name:"+Profile.name),
-	    			  m("h2", {class: 'subtitle'}, "email:"+Profile.email),
-	    			  m("button",{class:"button", onclick: function(e) { signOut()}},"Deconnexion"),
-	    			])
-	    		  }
-	      }
-
-
+	      
 	      var TopPet = {
 	    			list: [],
 	    			loadList: function() {
@@ -113,7 +102,7 @@
 	    								m('td', m('label', item.properties.titre)),
 	    								m('td', m('label', item.properties.dateC)),
 	    								m('td', m('label', troncstring)),
-	    								m('td', m('label', item.properties.nbSignature)),
+	    								m('td', m('label', item.properties.nbSignature)), 
 	    								m('button', {class:"button is-primary is-rounded is-small", onclick: function(e) { checkRedirectD(item);}}, "Voir plus"),
 	    							])
 	    						})
@@ -127,7 +116,7 @@
 	    				return m('div', {class:'container'}, [   	    					
 	    					m('nav',{class: 'navbar is-fixed-top'},[
 	    						m('div',{class: 'navbar-start'},[
-	    							m("site", {class: 'title'}, 'TinyPet'),
+	    							m('img', {src:"logo.png"}),
 	    							m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/index.html";}},
 	    								m("icon", {class:"fas fa-chart-line"}), "Top Petition"),
 	    							m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { checkRedirectCP();}}, 
@@ -136,12 +125,11 @@
 	    								m("icon", {class:"fas fa-user"}), "Espace perso"),	    								
 	    						]),
 	    						m('div',{class: 'navbar-end'},[
-	    							m('button', {class:"button is-warning is-rounded", onclick: function(e) { javascript:history.back();}},
-	    								m("icon", {class:"fas fa-undo"}), "Retour"),
-    	    						m("div", {	
- 	    					      	   "class":"g-signin2",
- 	    					      	   "data-theme":"dark",
- 	    					      	   "data-onsuccess": "onSignIn"}),  	
+	    							m("div", {	
+	 	    					      	   "class":"g-signin2",
+	 	    					      	   "data-theme":"dark",
+	 	    					      	   "data-onsuccess": "onSignIn"}),
+	 	    					    m('h1', {class: 'title is-ancestor'}, Profile.name),
 	    							m('button', {class:"button is-danger is-rounded", onclick: function(e) { signOut();}},
 	    								m("icon", {class:"fas fa-sign-out-alt"}), "Deconnexion"),
 	    						]),
