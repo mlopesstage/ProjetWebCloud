@@ -12,6 +12,7 @@
  	</head>
 
 <body>
+
 <script>
 
 const mail = localStorage.getItem("Email");
@@ -36,6 +37,7 @@ function onSignIn(googleUser) {
 	localStorage.setItem("Email", profile.getEmail());
 	localStorage.setItem("Name", profile.getName());
 	//window.location.href = "/topPet.html";
+	m.redraw();
 }
 
 function signOut() {
@@ -43,6 +45,7 @@ function signOut() {
 	auth2.signOut().then(function () {
 		console.log('User signed out.');
 		localStorage.clear();
+		m.redraw();
 	});
 }
 
@@ -141,7 +144,7 @@ function verifNavBarEnd() {
 			m("div", {
 				"class":"g-signin2",
 				"data-theme":"dark",
-				"data-onsuccess": "onSignIn"}),
+				"data-onsuccess": "onSignIn",}),
 		])
 	} else {
 		//location.reload();
@@ -163,11 +166,11 @@ var Hello = {
 		return m('div', {class:'container'}, [   	    					
 			m('nav',{class: 'navbar is-fixed-top'},[
 				m('div',{class: 'navbar-start'},[
-					m('img', {src:"logo.png"}),
+					m('img', {src:"/logo.png"}),
 					m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/index.html";}},
-						m("icon", {class:"fas fa-chart-line"}), "Top Petition"),
+						m("icon", {class:"fas fa-chart-line"}), "Top Pétition"),
 					m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { checkRedirectCP();}}, 
-						m("icon", {class:"fas fa-pen"}), "Créer petition"),
+						m("icon", {class:"fas fa-pen"}), "Créer pétition"),
 					m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { checkRedirectEP();}}, 
 						m("icon", {class:"fas fa-user"}), "Espace perso"),	    								
 				]),
@@ -175,16 +178,9 @@ var Hello = {
 			]),
 			m('h1', {class: 'title'}, "Buenvendidos! Vous êtes U1001"),
 			m('h1', {class: 'title'}, "Buenvendidos! Vous êtes U1001"),
-			m('h2', "V1.23"),
+			m('h2', "V1.30"),
 			m('h4', "Menu principal du site (PROVISOIRE):"),
 			m('h4', "La base est déjà peuplée de 250 pétitions (pour info)"),
-			
-			
-			
-			m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { checkRedirectEP();}}, "Remplir BDD"),
-			
-			
-			
 			m("div", {class: 'tile'}, m('div',{class:'tile is-child box'},m(TopPetView))),
 			m("footer", {class: 'has-text-centered'}, "Site réalisé par Luca GARIC et Michaël LOPES - V1.0"),
 		])

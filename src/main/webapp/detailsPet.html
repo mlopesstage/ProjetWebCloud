@@ -88,10 +88,6 @@ var DetailsPetView = {
 						m('td', m('label', item.properties.nbSignature)),
 					]),
 					m('tr', [
-						m('th', "Tags"),
-						m('td', m('label', item.properties.tags)),
-					]),
-					m('tr', [
 						m('th', "Etat"),
 						m('td', m('label', item.properties.etat)),
 					]),
@@ -182,11 +178,11 @@ var Hello = {
 		return m('div', {class:'container'}, [				 	   
 			m('nav',{class: 'navbar is-fixed-top'},[
 				m('div',{class: 'navbar-start'},[
-					m('img', {src:"logo.png"}),
+					m('img', {src:"/logo.png"}),
 					m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/index.html";}},
-						m("icon", {class:"fas fa-chart-line"}), "Top Petition"),
+						m("icon", {class:"fas fa-chart-line"}), "Top Pétition"),
 					m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { checkRedirectCP();}}, 
-						m("icon", {class:"fas fa-pen"}), "Créer petition"),
+						m("icon", {class:"fas fa-pen"}), "Créer pétition"),
 					m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { checkRedirectEP();}}, 
 						m("icon", {class:"fas fa-user"}), "Espace perso"),
 				]),
