@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta name="google-signin-scope" content="profile email">
-	<meta name="google-signin-client_id" content="232742472331-2f32mq8k3pbenacl44usnrf37362vo4t.apps.googleusercontent.com">
+	<meta name="google-signin-client_id" content="46330245209-9jejvn58229dabq46josvavn3crj9ogl.apps.googleusercontent.com">
 	<script src="https://apis.google.com/js/platform.js"async defer></script>
 	<meta charset="utf-8">
 	<title>Top petitions</title>
@@ -121,11 +121,19 @@ function checkOut(item){
 	}	
 }
 
-function checkRedirectEP(){
+function checkRedirectPS(){
 	if(gapi.auth2.getAuthInstance().isSignedIn.get()){	    		  
-		document.location.href="/espacePerso.html";
+		document.location.href="/petSignee.html";
 	} else {
-		window.alert("Vous devez vous connecter pour voir votre espace perso");
+		window.alert("Vous devez vous connecter pour voir vos petitions signées");
+	}
+}
+
+function checkRedirectPC(){
+	if(gapi.auth2.getAuthInstance().isSignedIn.get()){	    		  
+		document.location.href="/petCree.html";
+	} else {
+		window.alert("Vous devez vous connecter pour voir vos petitions crées");
 	}
 }
 
@@ -187,8 +195,10 @@ var Hello = {
 						m("icon", {class:"fas fa-chart-line"}), "Top Petition"),
 					m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { checkRedirectCP();}}, 
 						m("icon", {class:"fas fa-pen"}), "Créer petition"),
-					m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { checkRedirectEP();}}, 
-						m("icon", {class:"fas fa-user"}), "Espace perso"),
+					m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { checkRedirectPC();}}, 
+							m("icon", {class:"fas fa-user"}), "Mes pet créées"),
+					m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { checkRedirectPS();}}, 
+						m("icon", {class:"fas fa-user"}), "Mes pet signées"),  			
 				]),
 				m('div', verifNavBarEnd()),
 			]),

@@ -18,39 +18,6 @@
 const mail = localStorage.getItem("Email");
 const name = localStorage.getItem("Name");
 
-var MyPetSigned = {
-	list: [],
-	nextToken: "",
-	loadList: function() {
-		return m.request({
-			method: "GET",
-			url: "_ah/api/myApi/v1/signedpet/"+mail
-		})
-		.then(function(result) {
-			MyPetSigned.list = result.items
-			if ('nextPageToken' in result) {
-	        	MyPetSigned.nextToken= result.nextPageToken
-	        } else {
-	        	MyPetSigned.nextToken=""
-        	}
-			console.log("got:",name)
-		})
-	},
-	next: function() {
-	    return m.request({
-	        method: "GET",
-	        url: "_ah/api/myApi/v1/signedpet/"+mail+"?next="+MyPetSigned.nextToken})
-	    .then(function(result) {
-	    	console.log("got:",result)
-	    	result.items.map(function(item){MyPetSigned.list.push(item)})
-	        if ('nextPageToken' in result) {
-	        	MyPetSigned.nextToken= result.nextPageToken
-	        } else {
-	        	MyPetSigned.nextToken=""
-        }})
-	}
-}
-
 function troncatstring(item){
 	var troncstring = {}
 	if(item.properties.probleme.length > 30){
@@ -61,36 +28,6 @@ function troncatstring(item){
 	return troncstring
 }
 
-var MyPetSignedView = {
-	oninit: MyPetSigned.loadList,
-	view: function() {		
-		return m('div', [
-			m('div',{class:'subtitle'},"Mes petitions signées"),
-			m('table', {class:'table is-striped'},[
-				m('tr', [
-					m('th', {width:"25%"}, "Titre"),
-					m('th', {width:"15%"}, "Date de création"),
-					m('th', {width:"40%"}, "Probleme"),
-					m('th', {width:"10%"}, "Signatures"),
-					m('th', {width:"10%"}, "Détails"),
-				]),
-				MyPetSigned.list.map(function(item) {
-					return m("tr", [
-						m('td', m('label', item.properties.titre)),
-						m('td', m('label', item.properties.dateC)),
-						m('td', m('label', troncatstring(item))),
-						m('td', m('label', item.properties.nbSignature)),
-						m('button', {class:"button is-primary is-rounded is-small", onclick: function(e) { document.location.href="/detailsPet.html?idpet="+item.key.name;}}, "Voir plus"),
-					])
-				}),
-				m('button',{
-					class: 'button is-link',
-					onclick: function(e) {MyPetSigned.next()}
-				}, "Suivant"),
-			])
-		])
-	}
-}
 
 function signOut() {
 	var auth2 = gapi.auth2.getAuthInstance();
@@ -179,8 +116,10 @@ var Hello = {
 						m("icon", {class:"fas fa-chart-line"}), "Top Petition"),
 						m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/creerPetition.html";}}, 
 						m("icon", {class:"fas fa-pen"}), "Créer petition"),
-						m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/espacePerso.html";}}, 
-						m("icon", {class:"fas fa-user"}), "Espace perso"),
+						m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/petCree.html";}}, 
+						m("icon", {class:"fas fa-user"}), "Mes pet créées"),
+						m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/petSignee.html";}}, 
+						m("icon", {class:"fas fa-user"}), "Mes pet signées"),
 					]),
 					m('div',{class: 'navbar-end'},[
 						m('h1', {class: 'title is-ancestor'}, name),
@@ -193,10 +132,9 @@ var Hello = {
 						m("icon", {class:"fas fa-sign-out-alt"}), "Deconnexion"),
 					]),
 				]),
-				m("h1", {class: 'title'}, 'Mon Espace Personnel'),
-				m("h1", {class: 'title'}, 'Mon Espace Personnel'),
+				m("h1", {class: 'title'}, 'Mes pétitions créées'),
+				m("h1", {class: 'title'}, 'Mes pétitions créées'),
 				m('div',{class: 'navbar-end is-ancestor'},[
-					m("div", {class: 'tile'}, m('div',{class:'tile is-child box'},m(MyPetSignedView))),
 					m("div", {class: 'tile'}, m('div',{class:'tile is-child box'},m(MyPetCreatedView))),
 				]),
 				m("footer", {class: 'has-text-centered'}, "Site réalisé par Luca GARIC et Michaël LOPES - V1.0"),

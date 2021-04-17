@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 	<head>
 		<meta name="google-signin-scope" content="profile email">
-		<meta name="google-signin-client_id" content="232742472331-2f32mq8k3pbenacl44usnrf37362vo4t.apps.googleusercontent.com">
+		<meta name="google-signin-client_id" content="46330245209-9jejvn58229dabq46josvavn3crj9ogl.apps.googleusercontent.com">
 		<script src="https://apis.google.com/js/platform.js" async defer></script>
 		<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />	
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
@@ -13,9 +13,6 @@
 
 <body>
 <script>
-
-const mail = localStorage.getItem("Email");
-const name = localStorage.getItem("Name");
 
 /*var Profile={
 	name:"",
@@ -36,6 +33,7 @@ function onSignIn(googleUser) {
 	localStorage.setItem("Email", profile.getEmail());
 	localStorage.setItem("Name", profile.getName());
 	//window.location.href = "/topPet.html";
+	m.redraw();
 }
 
 function signOut() {
@@ -43,14 +41,23 @@ function signOut() {
 	auth2.signOut().then(function () {
 		console.log('User signed out.');
 		localStorage.clear();
+		m.redraw();
 	});
 }
 
-function checkRedirectEP(){
+function checkRedirectPS(){
 	if(gapi.auth2.getAuthInstance().isSignedIn.get()){	    		  
-		document.location.href="/espacePerso.html";
+		document.location.href="/petSignee.html";
 	} else {
-		window.alert("Vous devez vous connecter pour voir votre espace perso");
+		window.alert("Vous devez vous connecter pour voir vos petitions signées");
+	}
+}
+
+function checkRedirectPC(){
+	if(gapi.auth2.getAuthInstance().isSignedIn.get()){	    		  
+		document.location.href="/petCree.html";
+	} else {
+		window.alert("Vous devez vous connecter pour voir vos petitions créées");
 	}
 }
 
@@ -151,7 +158,7 @@ function verifNavBarEnd() {
 				"class":"g-signin2",
 				"data-theme":"dark",
 				"data-onsuccess": "onSignIn"}),
-			m('h1', {class: 'title is-ancestor'}, name),
+			m('h1', {class: 'title is-ancestor'}, localStorage.getItem("Name")),
 			m('button', {class:"button is-danger is-rounded", onclick: function(e) { signOut();}},
 			m("icon", {class:"fas fa-sign-out-alt"}), "Deconnexion"),
 		])
@@ -163,13 +170,15 @@ var Hello = {
 		return m('div', {class:'container'}, [   	    					
 			m('nav',{class: 'navbar is-fixed-top'},[
 				m('div',{class: 'navbar-start'},[
-					m('img', {src:"logo.png"}),
+					m('img', {src:"/logo.png"}),
 					m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/index.html";}},
 						m("icon", {class:"fas fa-chart-line"}), "Top Petition"),
 					m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { checkRedirectCP();}}, 
 						m("icon", {class:"fas fa-pen"}), "Créer petition"),
-					m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { checkRedirectEP();}}, 
-						m("icon", {class:"fas fa-user"}), "Espace perso"),	    								
+					m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { checkRedirectPC();}}, 
+						m("icon", {class:"fas fa-user"}), "Mes pet créées"),
+					m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { checkRedirectPS();}}, 
+						m("icon", {class:"fas fa-user"}), "Mes pet signées"),  								
 				]),
 				m('div', verifNavBarEnd()),
 			]),
