@@ -93,9 +93,9 @@ var Hello = {
 			return m('div', {class:'container'}, [
 				m('nav',{class: 'navbar is-fixed-top'},[
 					m('div',{class: 'navbar-start'},[
-						m('img', {src:"logo.png"}),
+						m('img', {src:"/logo.png"}),
 						m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/index.html";}},
-							m("icon", {class:"fas fa-chart-line"}), "Top Pétition"),
+							m("icon", {class:"fas fa-chart-line"}), "Top pétition"),
 						m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/creerPetition.html";}}, 
 							m("icon", {class:"fas fa-pen"}), "Créer pétition"),
 						m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/petCree.html";}}, 
@@ -111,7 +111,7 @@ var Hello = {
 							"data-theme":"dark",
 							"data-onsuccess": "onSignIn"}),	
 						m('button', {class:"button is-danger is-rounded", onclick: function(e) { signOut();}},
-							m("icon", {class:"fas fa-sign-out-alt"}), "Deconnexion"),						   
+							m("icon", {class:"fas fa-sign-out-alt"}), "Déconnexion"),						   
 					]),
 				]),
 				m("h1", {class: 'title is-ancestor'}, 'Création d\'une pétition'),

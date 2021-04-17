@@ -80,16 +80,12 @@ var DetailsPetView = {
 						m('td', m('label', item.properties.idAuteur)),
 					]),
 					m('tr', [
-						m('th', "Probleme"),
+						m('th', "Problème"),
 						m('td', m('label', item.properties.probleme)),
 					]),
 					m('tr', [
 						m('th', "Signatures"),
 						m('td', m('label', item.properties.nbSignature)),
-					]),
-					m('tr', [
-						m('th', "Tags"),
-						m('td', m('label', item.properties.tags)),
 					]),
 					m('tr', [
 						m('th', "Etat"),
@@ -107,12 +103,12 @@ function checkOut(item){
 		return m('button',{
 			class: 'button is-danger is-rounded',
 			onclick: function(e) {DetailsPet.close(id);}					        	
-		},"Fermer Petition")
+		},"Fermer Pétition")
 	} else if (!(item.properties.idSignataire.includes(mail)) && item.properties.etat == "Ouverte" && mail != null)  {
 		return m('button',{
 			class: 'button is-primary is-rounded',
 			onclick: function(e) {DetailsPet.sign(mail,id);}					        	
-		},"Signer Petition")
+		},"Signer Pétition")
 	} else {
 		return 	m('button',{
 			class: 'button is-danger is-rounded',
@@ -125,7 +121,7 @@ function checkRedirectPS(){
 	if(gapi.auth2.getAuthInstance().isSignedIn.get()){	    		  
 		document.location.href="/petSignee.html";
 	} else {
-		window.alert("Vous devez vous connecter pour voir vos petitions signées");
+		window.alert("Vous devez vous connecter pour voir vos pétitions signées");
 	}
 }
 
@@ -133,7 +129,7 @@ function checkRedirectPC(){
 	if(gapi.auth2.getAuthInstance().isSignedIn.get()){	    		  
 		document.location.href="/petCree.html";
 	} else {
-		window.alert("Vous devez vous connecter pour voir vos petitions crées");
+		window.alert("Vous devez vous connecter pour voir vos pétitions crées");
 	}
 }
 
@@ -150,6 +146,7 @@ function onSignIn(googleUser) {
 	var profile = googleUser.getBasicProfile(); 
 	localStorage.setItem("Email", profile.getEmail());
 	localStorage.setItem("Name", profile.getName());
+	m.redraw();
 }
 
 function signOut() {
@@ -178,9 +175,9 @@ function verifNavBarEnd() {
 				"class":"g-signin2",
 				"data-theme":"dark",
 				"data-onsuccess": "onSignIn"}),
-			m('h1', {class: 'title is-ancestor'}, name),
+			m('h1', {class: 'title is-ancestor'}, localStorage.getItem("Name")),
 			m('button', {class:"button is-danger is-rounded", onclick: function(e) { signOut();}},
-			m("icon", {class:"fas fa-sign-out-alt"}), "Deconnexion"),
+			m("icon", {class:"fas fa-sign-out-alt"}), "Déconnexion"),
 		])
 	}
 }
@@ -190,11 +187,11 @@ var Hello = {
 		return m('div', {class:'container'}, [				 	   
 			m('nav',{class: 'navbar is-fixed-top'},[
 				m('div',{class: 'navbar-start'},[
-					m('img', {src:"logo.png"}),
+					m('img', {src:"/logo.png"}),
 					m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/index.html";}},
-						m("icon", {class:"fas fa-chart-line"}), "Top Petition"),
+						m("icon", {class:"fas fa-chart-line"}), "Top pétition"),
 					m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { checkRedirectCP();}}, 
-						m("icon", {class:"fas fa-pen"}), "Créer petition"),
+						m("icon", {class:"fas fa-pen"}), "Créer pétition"),
 					m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { checkRedirectPC();}}, 
 							m("icon", {class:"fas fa-user"}), "Mes pet créées"),
 					m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { checkRedirectPS();}}, 

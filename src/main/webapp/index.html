@@ -110,12 +110,12 @@ var TopPetView = {
 	oninit: TopPet.loadList,
 	view: function() {
 		return m('div', [
-			m('div',{class:'subtitle'},"Top 100 des pétitions les plus signées"),
+			m('div',{class:'subtitle'},"Classement des meilleures pétitions"),
 			m('table', {class:'table is-striped'},[
 				m('tr', [
 					m('th', {width:"20%"}, "Titre"),
 					m('th', {width:"15%"}, "Date de création"),
-					m('th', {width:"45%"}, "Probleme"),
+					m('th', {width:"45%"}, "Problème"),
 					m('th', {width:"10%"}, "Signatures"),
 					m('th', {width:"10%"}, "Détails"),
 				]),
@@ -160,7 +160,7 @@ function verifNavBarEnd() {
 				"data-onsuccess": "onSignIn"}),
 			m('h1', {class: 'title is-ancestor'}, localStorage.getItem("Name")),
 			m('button', {class:"button is-danger is-rounded", onclick: function(e) { signOut();}},
-			m("icon", {class:"fas fa-sign-out-alt"}), "Deconnexion"),
+			m("icon", {class:"fas fa-sign-out-alt"}), "Déconnexion"),
 		])
 	}
 }
@@ -172,9 +172,9 @@ var Hello = {
 				m('div',{class: 'navbar-start'},[
 					m('img', {src:"/logo.png"}),
 					m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/index.html";}},
-						m("icon", {class:"fas fa-chart-line"}), "Top Petition"),
+						m("icon", {class:"fas fa-chart-line"}), "Top pétition"),
 					m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { checkRedirectCP();}}, 
-						m("icon", {class:"fas fa-pen"}), "Créer petition"),
+						m("icon", {class:"fas fa-pen"}), "Créer pétition"),
 					m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { checkRedirectPC();}}, 
 						m("icon", {class:"fas fa-user"}), "Mes pet créées"),
 					m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { checkRedirectPS();}}, 
@@ -182,18 +182,8 @@ var Hello = {
 				]),
 				m('div', verifNavBarEnd()),
 			]),
-			m('h1', {class: 'title'}, "Buenvendidos! Vous êtes U1001"),
-			m('h1', {class: 'title'}, "Buenvendidos! Vous êtes U1001"),
-			m('h2', "V1.23"),
-			m('h4', "Menu principal du site (PROVISOIRE):"),
-			m('h4', "La base est déjà peuplée de 250 pétitions (pour info)"),
-			
-			
-			
-			m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { checkRedirectEP();}}, "Remplir BDD"),
-			
-			
-			
+			m('h1', {class: 'title'}, "Bienvenue sur le site TinyPet !"),
+			m('h1', {class: 'title'}, "Bienvenue sur le site TinyPet !"),	
 			m("div", {class: 'tile'}, m('div',{class:'tile is-child box'},m(TopPetView))),
 			m("footer", {class: 'has-text-centered'}, "Site réalisé par Luca GARIC et Michaël LOPES - V1.0"),
 		])

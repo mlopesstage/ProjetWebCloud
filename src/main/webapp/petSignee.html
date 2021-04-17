@@ -70,7 +70,7 @@ var MyPetSignedView = {
 				m('tr', [
 					m('th', {width:"25%"}, "Titre"),
 					m('th', {width:"15%"}, "Date de création"),
-					m('th', {width:"40%"}, "Probleme"),
+					m('th', {width:"40%"}, "Problème"),
 					m('th', {width:"10%"}, "Signatures"),
 					m('th', {width:"10%"}, "Détails"),
 				]),
@@ -107,11 +107,11 @@ var Hello = {
 			return m('div', {class:'container'}, [
 				m('nav',{class: 'navbar is-fixed-top'},[
 					m('div',{class: 'navbar-start'},[
-						m('img', {src:"logo.png"}),
+						m('img', {src:"/logo.png"}),
 						m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/index.html";}},
-						m("icon", {class:"fas fa-chart-line"}), "Top Petition"),
+						m("icon", {class:"fas fa-chart-line"}), "Top pétition"),
 						m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/creerPetition.html";}}, 
-						m("icon", {class:"fas fa-pen"}), "Créer petition"),
+						m("icon", {class:"fas fa-pen"}), "Créer pétition"),
 						m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/petCree.html";}}, 
 						m("icon", {class:"fas fa-user"}), "Mes pet créées"),
 						m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/petSignee.html";}}, 
@@ -125,7 +125,7 @@ var Hello = {
 							"data-theme":"dark",
 							"data-onsuccess": "onSignIn"}),
 						m('button', {class:"button is-danger is-rounded", onclick: function(e) { signOut();}},
-						m("icon", {class:"fas fa-sign-out-alt"}), "Deconnexion"),
+						m("icon", {class:"fas fa-sign-out-alt"}), "Déconnexion"),
 					]),
 				]),
 				m("h1", {class: 'title'}, 'Mes pétitions signées'),
