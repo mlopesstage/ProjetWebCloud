@@ -178,6 +178,13 @@ var Hello = {
 			m('h2', "V1.23"),
 			m('h4', "Menu principal du site (PROVISOIRE):"),
 			m('h4', "La base est déjà peuplée de 250 pétitions (pour info)"),
+			
+			
+			
+			m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { checkRedirectEP();}}, "Remplir BDD"),
+			
+			
+			
 			m("div", {class: 'tile'}, m('div',{class:'tile is-child box'},m(TopPetView))),
 			m("footer", {class: 'has-text-centered'}, "Site réalisé par Luca GARIC et Michaël LOPES - V1.0"),
 		])
