@@ -2,9 +2,9 @@
 <html>
 <head>
 	<meta name="google-signin-scope" content="profile email">
-	<meta name="google-signin-client_id" content="232742472331-2f32mq8k3pbenacl44usnrf37362vo4t.apps.googleusercontent.com">
+	<meta name="google-signin-client_id" content="46330245209-9jejvn58229dabq46josvavn3crj9ogl.apps.googleusercontent.com">
 	<script src="https://apis.google.com/js/platform.js"async defer></script>
-	<title>Creation de pétition</title>
+	<title>Créer pétition</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
@@ -82,7 +82,7 @@ var CreatePet = {
 		})
 		.then(function(result) {
 			console.log("got:",result)
-			document.location.href="/espacePerso.html"
+			document.location.href="/petCree.html"
 		})
 	}
 }
@@ -95,11 +95,13 @@ var Hello = {
 					m('div',{class: 'navbar-start'},[
 						m('img', {src:"/logo.png"}),
 						m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/index.html";}},
-							m("icon", {class:"fas fa-chart-line"}), "Top Pétition"),
+							m("icon", {class:"fas fa-chart-line"}), "Top pétition"),
 						m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/creerPetition.html";}}, 
 							m("icon", {class:"fas fa-pen"}), "Créer pétition"),
-						m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/espacePerso.html";}}, 
-							m("icon", {class:"fas fa-user"}), "Espace perso"),
+						m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/petCree.html";}}, 
+							m("icon", {class:"fas fa-user"}), "Mes pet créées"),
+						m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/petSignee.html";}}, 
+							m("icon", {class:"fas fa-user"}), "Mes pet signées"),  			
 					]),
 					m('div',{class: 'navbar-end'},[
 						m('h1', {class: 'title is-ancestor'}, name),
@@ -109,7 +111,7 @@ var Hello = {
 							"data-theme":"dark",
 							"data-onsuccess": "onSignIn"}),	
 						m('button', {class:"button is-danger is-rounded", onclick: function(e) { signOut();}},
-							m("icon", {class:"fas fa-sign-out-alt"}), "Deconnexion"),						   
+							m("icon", {class:"fas fa-sign-out-alt"}), "Déconnexion"),						   
 					]),
 				]),
 				m("h1", {class: 'title is-ancestor'}, 'Création d\'une pétition'),

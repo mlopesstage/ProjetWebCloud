@@ -2,21 +2,18 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 	<head>
 		<meta name="google-signin-scope" content="profile email">
-		<meta name="google-signin-client_id" content="232742472331-2f32mq8k3pbenacl44usnrf37362vo4t.apps.googleusercontent.com">
+		<meta name="google-signin-client_id" content="46330245209-9jejvn58229dabq46josvavn3crj9ogl.apps.googleusercontent.com">
 		<script src="https://apis.google.com/js/platform.js" async defer></script>
 		<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />	
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
 		<script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
 		<script src="https://unpkg.com/mithril/mithril.js"></script>
-		<title>ProjetWebCloud</title>
+		<title>Top pétitions</title>
  	</head>
 
 <body>
 
 <script>
-
-const mail = localStorage.getItem("Email");
-const name = localStorage.getItem("Name");
 
 /*var Profile={
 	name:"",
@@ -49,11 +46,19 @@ function signOut() {
 	});
 }
 
-function checkRedirectEP(){
+function checkRedirectPS(){
 	if(gapi.auth2.getAuthInstance().isSignedIn.get()){	    		  
-		document.location.href="/espacePerso.html";
+		document.location.href="/petSignee.html";
 	} else {
-		window.alert("Vous devez vous connecter pour voir votre espace perso");
+		window.alert("Vous devez vous connecter pour voir vos pétitions signées");
+	}
+}
+
+function checkRedirectPC(){
+	if(gapi.auth2.getAuthInstance().isSignedIn.get()){	    		  
+		document.location.href="/petCree.html";
+	} else {
+		window.alert("Vous devez vous connecter pour voir vos pétitions créées");
 	}
 }
 
@@ -106,12 +111,12 @@ var TopPetView = {
 	oninit: TopPet.loadList,
 	view: function() {
 		return m('div', [
-			m('div',{class:'subtitle'},"Top 100 des pétitions les plus signées"),
+			m('div',{class:'subtitle'},"Classement des meilleures pétitions"),
 			m('table', {class:'table is-striped'},[
 				m('tr', [
 					m('th', {width:"20%"}, "Titre"),
 					m('th', {width:"15%"}, "Date de création"),
-					m('th', {width:"45%"}, "Probleme"),
+					m('th', {width:"45%"}, "Problème"),
 					m('th', {width:"10%"}, "Signatures"),
 					m('th', {width:"10%"}, "Détails"),
 				]),
@@ -154,9 +159,9 @@ function verifNavBarEnd() {
 				"class":"g-signin2",
 				"data-theme":"dark",
 				"data-onsuccess": "onSignIn"}),
-			m('h1', {class: 'title is-ancestor'}, name),
+			m('h1', {class: 'title is-ancestor'}, localStorage.getItem("Name")),
 			m('button', {class:"button is-danger is-rounded", onclick: function(e) { signOut();}},
-			m("icon", {class:"fas fa-sign-out-alt"}), "Deconnexion"),
+			m("icon", {class:"fas fa-sign-out-alt"}), "Déconnexion"),
 		])
 	}
 }
@@ -168,19 +173,18 @@ var Hello = {
 				m('div',{class: 'navbar-start'},[
 					m('img', {src:"/logo.png"}),
 					m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { document.location.href="/index.html";}},
-						m("icon", {class:"fas fa-chart-line"}), "Top Pétition"),
+						m("icon", {class:"fas fa-chart-line"}), "Top pétition"),
 					m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { checkRedirectCP();}}, 
 						m("icon", {class:"fas fa-pen"}), "Créer pétition"),
-					m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { checkRedirectEP();}}, 
-						m("icon", {class:"fas fa-user"}), "Espace perso"),	    								
+					m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { checkRedirectPC();}}, 
+						m("icon", {class:"fas fa-user"}), "Mes pet créées"),
+					m('button', {class:"button is-link is-light is-rounded", onclick: function(e) { checkRedirectPS();}}, 
+						m("icon", {class:"fas fa-user"}), "Mes pet signées"),  								
 				]),
 				m('div', verifNavBarEnd()),
 			]),
-			m('h1', {class: 'title'}, "Buenvendidos! Vous êtes U1001"),
-			m('h1', {class: 'title'}, "Buenvendidos! Vous êtes U1001"),
-			m('h2', "V1.30"),
-			m('h4', "Menu principal du site (PROVISOIRE):"),
-			m('h4', "La base est déjà peuplée de 250 pétitions (pour info)"),
+			m('h1', {class: 'title'}, "Bienvenue sur le site TinyPet !"),
+			m('h1', {class: 'title'}, "Bienvenue sur le site TinyPet !"),
 			m("div", {class: 'tile'}, m('div',{class:'tile is-child box'},m(TopPetView))),
 			m("footer", {class: 'has-text-centered'}, "Site réalisé par Luca GARIC et Michaël LOPES - V1.0"),
 		])
