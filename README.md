@@ -27,8 +27,8 @@ Ci-dessous la liste de toutes les implémentations :
 
 ## Fonctionnement
 
-Nous avons donc travaillé avec un système d’endpoint dans une classe java. C’est dans cette classe que toutes nos requêtes sont effectuées, nous effectuons ensuite des appels REST dans les différentes vues codées en Mithrils dans notre application.
-Nous avons donc utilisé Mithril pour animer notre site. Cependant, nous avons fonctionné de manière à séparer les vues dans différents fichiers HTML et non pas en un fichier unique comme l’exige Mithril. Cette façon de procéder est dûe à notre méconnaissance de la technologie Mithril, nous étions partis très tôt dans le projet dans ce mode de fonctionnement de séparer les affichages en plusieurs vues différentes. Nous avons compris assez tard l’intérêt d’utiliser le framework Mithril.
+Nous avons donc travaillé avec un système d’endpoint dans une classe java. C’est dans cette classe que toutes nos requêtes sont effectuées, nous effectuons ensuite des appels REST dans les différentes vues codées en Mithrils dans notre application.<br>
+Nous avons donc utilisé Mithril pour animer notre site. Cependant, nous avons fonctionné de manière à séparer les vues dans différents fichiers HTML et non pas en un fichier unique comme l’exige Mithril. Cette façon de procéder est dûe à notre méconnaissance de la technologie Mithril, nous étions partis très tôt dans le projet dans ce mode de fonctionnement de séparer les affichages en plusieurs vues différentes. Nous avons compris assez tard l’intérêt d’utiliser le framework Mithril.<br>
 Concernant le fonctionnement général du site, nous avons tout d’abord mis un point d’honneur à gérer la sécurité, de ce fait nous avons géré le fait qu’un utilisateur déconnecté ne puisse pas accéder à des pages où il est censé être connecté.
 
 L’utilisateur déconnecté a donc accès à :
