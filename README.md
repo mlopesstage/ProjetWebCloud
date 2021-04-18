@@ -40,34 +40,34 @@ L’utilisateur déconnecté a donc accès à :
 ![detailPetitionSignee](images_readme/detailPetitionSignee.PNG "detailPetitionSignee")
 
 
-Afin d’aider notre site à passer à l’échelle nous avons mis en place un système de pagination. Dans une limite de dix éléments, il est possible de charger les dix éléments suivants dans la requête effectuée à l’aide d’un bouton “Suivant”.<br><br>
+Afin d’aider notre site à passer à l’échelle nous avons mis en place un système de pagination. Dans une limite de dix éléments, il est possible de charger les dix éléments suivants dans la requête effectuée à l’aide d’un bouton “Suivant”.
+
 Cette fonctionnalité est présente sur :
 * L’accueil, ce qui permet notamment de ne pas charger 100 pétitions en une seule requête (mais de les charger successivement 10 par 10).
 * Mes pétitions créées et mes pétitions signées, dans ces deux vues nous avons aussi choisi de charger les pétitions 10 par 10 avec notre pagination dans le sens où en l’absence de restrictions d’affichage, ces requêtes ne passeront pas à l’échelle (notamment pour les pétitions signées d’un utilisateur où le nombre peut être assez conséquent).
 
 ![mesPetitionsSignees](images_readme/mesPetitionsSignees.PNG "mesPetitionsSignees")
-Notre application possède aussi un formulaire de création :
+Notre application possède aussi un formulaire de création :<br>
 ![creationPetition](images_readme/creationPetition.PNG "creationPetition")
 ![mesPetitionsCreees](images_readme/mesPetitionsCreees.PNG "mesPetitionsCreees")
 
-L’auteur de chaque pétition a donc la possibilité de la fermer, ce qui exclut l’opportunité de la signer pour les autres utilisateurs :
+L’auteur de chaque pétition a donc la possibilité de la fermer, ce qui exclut l’opportunité de la signer pour les autres utilisateurs :<br>
 ![possibiliteFermerPetitionCreee](images_readme/possibiliteFermerPetitionCreee.PNG "possibiliteFermerPetitionCreee")
 
-Enfin, comme nous l’avons mentionné au début de la partie fonctionnalité, un utilisateur non connecté voit sa navigation être restreintes, il n’a aussi pas la possibilité de signer une pétition :
-
+Enfin, comme nous l’avons mentionné au début de la partie fonctionnalité, un utilisateur non connecté voit sa navigation être restreintes, il n’a aussi pas la possibilité de signer une pétition :<br>
 ![utilisateurNonConnecte](images_readme/utilisateurNonConnecte.PNG "utilisateurNonConnecte")
 
 ## Fonctionnement
 
 Table “Petition” :
-![entiteesDatastore](images_readme/entiteesDatastore.PNG "entiteesDatastore")
+![entiteesDatastore](images_readme/entiteesDatastore.png "entiteesDatastore")
 
 Ci-dessus une capture d'écran de notre entité pétition, ce qui est notable ici est le fait que nous ayons salé la clé de chaque entrée pour faire en sorte de trier les pétitions par date de création (les plus récentes en premières). Ça nous permet notamment de nous affranchir d’index composites sur la requête d’affichage de top pétitions à l’accueil.<br>
 Les utilisateurs étant gérés par google oauth2, nous n’avons pas d’entité de ce nom dans notre base.
 
 ## Temps d’exécution
 
-Les différents tests ont été réalisés 50 fois, sauf la création d’une pétition qui a été réalisée 10 fois. Les temps indiqués correspondent à la latence moyenne des 50 exécutions indiquées sur Google Cloud Platforme.<br>
+Les différents tests ont été réalisés 50 fois, sauf la création d’une pétition qui a été réalisée 10 fois. Les temps indiqués correspondent à la latence moyenne des 50 exécutions indiquées sur Google Cloud Platforme.
 
 * Top pétitions (150 lors du test) : 400,012 ms
 * Créer pétition : 139,273 ms
