@@ -22,31 +22,12 @@ public class CreerPetitionASuppALaFin extends HttpServlet{
 		response.setContentType("text/html");
 		response.setCharacterEncoding("UTF-8");
 
-		
 		Random r = new Random();
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-
-		// Create petition
-		//for (int i = 0; i < 250; i++) {
-			/*Random d = new Random();
-			int date1 = 1 + d.nextInt(28);
-			int date2 = 1 + d.nextInt(12);
-			int date3 = 2017 + d.nextInt(3);
-			int date4 = d.nextInt(23);
-			int date5 = d.nextInt(59);
-			int date6 = d.nextInt(59);
-			int date7 = date1+date2+date3+date4+date5+date6;
-			
-			String dateClé = ""+date1+date2+date3+date4+date5+date6;
-			Long resultat = Long.parseLong(dateClé);*/
-			
 			String owner = "UserMail"+r.nextInt(250)+"@gmail.com";
-			//Entity p = new Entity("Petition", Long.MAX_VALUE-(resultat)+":"+owner);
 			Entity p = new Entity("Petition", Long.MAX_VALUE-(new Date().getTime())+":"+owner);
 			p.setProperty("titre", "Pétition " + r.nextInt(1000) + " pour une bonne note");
 			p.setProperty("probleme", "Nous voudrions une bonne note dans ce projet pour cette pétition n°"+ r.nextInt(1000));
-			//String datelocale = date1+"/"+date2+"/"+date3+" "+date4+":"+date5+":"+date6;
-			//p.setProperty("dateC", datelocale);
 			Date date = new Date();
 			SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 			p.setProperty("dateC", formatter.format(date));
@@ -60,6 +41,5 @@ public class CreerPetitionASuppALaFin extends HttpServlet{
 			p.setProperty("nbSignature", pset.size());
 			datastore.put(p);
 			response.getWriter().print("<li> created post:" + p.getKey() + "<br>");
-		//}
 	}
 }

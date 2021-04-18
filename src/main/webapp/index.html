@@ -15,25 +15,17 @@
 
 <script>
 
-/*var Profile={
-	name:"",
-	email:"",
-	ID:"",
-	view: function(){
-		return m('div', {class:'container'}, [
-			m("h1", {class: 'title'}, "name:"+Profile.name),
-			m("h2", {class: 'subtitle'}, "email:"+Profile.email),
-		])
-	}
-}*/
-
+/*
+ * C'est notre page d'accueil de l'application.
+ * Nous avons décidé d'afficher le classement des pétitions à l'arrivé de l'utilisateur sur cette page pour obtenir une page index remplie et interactive.
+ * C'est notamment ici qu'est géré notre token de connection (avec la page de détails).
+ * La requête de top pétition est paginée avec une limite de dix éléments.
+ */
 function onSignIn(googleUser) {
 	// Useful data for your client-side scripts:
 	var profile = googleUser.getBasicProfile();
-	//Profile.ID=googleUser.getAuthResponse().id_token;
 	localStorage.setItem("Email", profile.getEmail());
 	localStorage.setItem("Name", profile.getName());
-	//window.location.href = "/topPet.html";
 	m.redraw();
 }
 
@@ -86,7 +78,6 @@ var TopPet = {
 				TopPet.nextToken=""
 			}
 			console.log("got:",result.items)
-			// m.redraw(true) 
 		})
 	},
 	next: function() {
@@ -152,7 +143,6 @@ function verifNavBarEnd() {
 				"data-onsuccess": "onSignIn",}),
 		])
 	} else {
-		//location.reload();
 		return m('div',{class: 'navbar-end'},[
 			m("div", {
 				"style": "display:none",

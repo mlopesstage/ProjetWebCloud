@@ -43,6 +43,12 @@ import com.google.appengine.api.datastore.Query.SortDirection;
 		   packagePath = "")
      )
 
+/*
+ * Dans cet endpoint est géré toutes les requêtes appellées par les vues Mithril
+ * Les vues effectues donc des appels REST sur cet endpoint afin d'afficher les résultats des différentes requêtes effectuées
+ * Chaque "@ApiMethod" est une requête
+ * La pagination est implémentée dans les méthodes CollectionResponse s'identifie notamment avec le token "next"
+ */
 public class PetitionEndpoint {
 
 	@ApiMethod(name = "signedpet", httpMethod = HttpMethod.GET)

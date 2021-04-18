@@ -15,6 +15,12 @@
 <body>
 <script>
 
+/*
+ * C'est ici que les informations précises d'une pétition sont affichées.
+ * Nous avons notamment géré des cas où un utilisateur auteur peut fermer une pétition, ne peut pas signer sa pétition
+ * et où un utilisateur ne peut pas signer deux fois la même pétition.
+ */
+
 var currenturl = window.location.search;
 const urlParams = new URLSearchParams(currenturl);
 const mail = localStorage.getItem("Email");

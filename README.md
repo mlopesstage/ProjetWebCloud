@@ -12,7 +12,7 @@ Ce document est divisé en plusieurs sections. Vous trouverez les liens de notre
 
 * Lien vers [l'application](https://projetwebcloud.ew.r.appspot.com/)
 * Lien vers le [portail de l'API](https://endpointsportal.projetwebcloud.cloud.goog/)
-* Lien vers le [Github](https://github.com/mlopesstage/ProjetWebCloud)
+* Lien vers le [Github](https://github.com/mlopesstage/ProjetWebCloud_GARIC_LOPES)
 
 ## Fonctionnalités implémentées
 
