@@ -35,4 +35,4 @@ L’utilisateur déconnecté a donc accès à :
 * L’accueil, où il peut consulter le classement des pétitions les plus signées
 * Le détail d’une pétition **(cependant, il ne peut pas signer)**
 
-![accueilTopPetition](images_readme/accueilTopPetition.png "accueilTopPetition")
+![accueilTopPetition](images_readme/accueilTopPetition.PNG "accueilTopPetition")
