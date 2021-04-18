@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta name="google-signin-scope" content="profile email">
-	<meta name="google-signin-client_id" content="46330245209-9jejvn58229dabq46josvavn3crj9ogl.apps.googleusercontent.com">
+	<meta name="google-signin-client_id" content="232742472331-2f32mq8k3pbenacl44usnrf37362vo4t.apps.googleusercontent.com">
 	<script src="https://apis.google.com/js/platform.js"async defer></script>
 	<meta charset="UTF-8">
 	<title>Pétitions créées</title>
@@ -20,8 +20,8 @@ const name = localStorage.getItem("Name");
 
 function troncatstring(item){
 	var troncstring = {}
-	if(item.properties.probleme.length > 30){
-		troncstring = item.properties.probleme.substring(0,30)+"..."
+	if(item.properties.probleme.length > 100){
+		troncstring = item.properties.probleme.substring(0,100)+"..."
 	} else {
 		troncstring = item.properties.probleme
 	}
@@ -49,9 +49,9 @@ var MyPetCreated = {
 		.then(function(result) {
 			MyPetCreated.list = result.items
 			if ('nextPageToken' in result) {
-	        	MyPetSigned.nextToken= result.nextPageToken
+				MyPetCreated.nextToken= result.nextPageToken
 	        } else {
-	        	MyPetSigned.nextToken=""
+	        	MyPetCreated.nextToken=""
 	    	}
 		})
 	},

@@ -32,8 +32,8 @@ import com.google.appengine.api.datastore.Query.SortDirection;
 
 @Api(name = "myApi",
      version = "v1",
-     audiences = "46330245209-9jejvn58229dabq46josvavn3crj9ogl.apps.googleusercontent.com",
-  	 clientIds = "46330245209-9jejvn58229dabq46josvavn3crj9ogl.apps.googleusercontent.com",
+     audiences = "232742472331-2f32mq8k3pbenacl44usnrf37362vo4t.apps.googleusercontent.com",
+  	 clientIds = "232742472331-2f32mq8k3pbenacl44usnrf37362vo4t.apps.googleusercontent.com",
   	 scopes = "https://www.googleapis.com/auth/userinfo.profile",
   			
      namespace =
@@ -181,7 +181,7 @@ public class PetitionEndpoint {
 		pset.add("");
 		p.setProperty("idSignataire", pset);
 		p.setProperty("idAuteur", cp.owner);
-		p.setProperty("nbSignature", 12000);
+		p.setProperty("nbSignature", 0);
 		p.setProperty("probleme", cp.petProbleme);
 		p.setProperty("titre", cp.petName);
 

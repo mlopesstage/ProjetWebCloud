@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta name="google-signin-scope" content="profile email">
-	<meta name="google-signin-client_id" content="46330245209-9jejvn58229dabq46josvavn3crj9ogl.apps.googleusercontent.com">
+	<meta name="google-signin-client_id" content="232742472331-2f32mq8k3pbenacl44usnrf37362vo4t.apps.googleusercontent.com">
 	<script src="https://apis.google.com/js/platform.js"async defer></script>
 	<meta charset="UTF-8">
 	<title>Pétitions signées</title>
@@ -53,8 +53,8 @@ var MyPetSigned = {
 
 function troncatstring(item){
 	var troncstring = {}
-	if(item.properties.probleme.length > 30){
-		troncstring = item.properties.probleme.substring(0,30)+"..."
+	if(item.properties.probleme.length > 100){
+		troncstring = item.properties.probleme.substring(0,100)+"..."
 	} else {
 		troncstring = item.properties.probleme
 	}
@@ -68,9 +68,9 @@ var MyPetSignedView = {
 			m('div',{class:'subtitle'},"Mes petitions signées"),
 			m('table', {class:'table is-striped'},[
 				m('tr', [
-					m('th', {width:"25%"}, "Titre"),
+					m('th', {width:"20%"}, "Titre"),
 					m('th', {width:"15%"}, "Date de création"),
-					m('th', {width:"40%"}, "Problème"),
+					m('th', {width:"45%"}, "Problème"),
 					m('th', {width:"10%"}, "Signatures"),
 					m('th', {width:"10%"}, "Détails"),
 				]),
