@@ -2,9 +2,9 @@
 
 ## Introduction
 
-Ce projet a été réalisé par Luca GARIC et Michaël LOPES en M1 MIAGE Classique.<br><br>
+Ce projet a été réalisé par Luca GARIC et Michaël LOPES en M1 MIAGE Classique.
 
-L’objectif de ce projet est de réaliser une application Web ressemblant à un site de pétition, c’est-à-dire la création et la signature de pétition.<br><br>
+L’objectif de ce projet est de réaliser une application Web ressemblant à un site de pétition, c’est-à-dire la création et la signature de pétition.
 
 Ce document est divisé en plusieurs sections. Vous trouverez les liens de notre application, les fonctionnalités implémentées, le fonctionnement de l’application, les entités de notre base de données, les temps d’exécution de l’application, les fonctionnalités non implémentées et pour terminer une conclusion.
 
