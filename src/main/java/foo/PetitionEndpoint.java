@@ -2,6 +2,7 @@ package foo;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.TimeZone;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -180,6 +181,7 @@ public class PetitionEndpoint {
 
 		Date date = new Date();
 		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+		formatter.setTimeZone(TimeZone.getTimeZone("Europe/Paris"));
 		Entity p = new Entity("Petition", Long.MAX_VALUE-(new Date().getTime())+":"+cp.owner);
 		p.setProperty("dateC", formatter.format(date));
 		p.setProperty("etat", "Ouverte");
